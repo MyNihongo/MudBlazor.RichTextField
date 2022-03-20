@@ -1,0 +1,4 @@
+MudBlazorRichTextEdit = {
+	observers: {}
+};
+

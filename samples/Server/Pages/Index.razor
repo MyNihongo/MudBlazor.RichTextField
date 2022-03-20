@@ -3,4 +3,13 @@
 <PageTitle>Index</PageTitle>
 <MudText Typo="Typo.h2">Hello, 世界</MudText>
 
-<MudRichTextField></MudRichTextField>
+<MudTextField @bind-Value="TextValue" Label="Standard" Variant="Variant.Text"></MudTextField>
+<MudTextField @bind-Value="TextValue" Label="Filled" Variant="Variant.Filled"></MudTextField>
+<MudTextField @bind-Value="TextValue" Label="Outlined" Variant="Variant.Outlined"></MudTextField>
+
+<MudRichTextField Label="Test" Variant="Variant.Outlined" />
+
+@code
+{
+	public string TextValue { get; set; } = string.Empty;
+}

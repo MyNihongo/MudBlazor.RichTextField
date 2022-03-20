@@ -1,7 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
-<PageTitle>MudBlazor.RichTextField</PageTitle>
-
 <div class="page">
-	@Body
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <article class="content">
+            @Body
+        </article>
+    </main>
 </div>
