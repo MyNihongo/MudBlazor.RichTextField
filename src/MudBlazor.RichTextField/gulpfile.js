@@ -1,6 +1,6 @@
 const { src, dest, series } = require("gulp");
 const minifyCss = require("gulp-clean-css");
-const minifyJs = require("gulp-minify");
+const minifyJs = require("gulp-uglify");
 const rename = require("gulp-rename");
 
 const baseName = "MudBlazor.RichTextField";
