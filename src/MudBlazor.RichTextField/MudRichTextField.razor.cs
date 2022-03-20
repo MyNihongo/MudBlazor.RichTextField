@@ -50,6 +50,15 @@ public partial class MudRichTextField : IAsyncDisposable
 		.AddClass("mud-input-label-inputcontrol")
 		.Build();
 
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender)
+			return;
+
+		await _jsRuntime.InitAsync(_id, _innerHtmlChangedInvokable)
+			.ConfigureAwait(false);
+	}
+
 	public ValueTask DisposeAsync()
 	{
 		GC.SuppressFinalize(this);
@@ -63,15 +72,6 @@ public partial class MudRichTextField : IAsyncDisposable
 		_value = innerHtml.FromInnerHtml();
 		
 		await InvokeAsync(() => ValueChanged.InvokeAsync(_value))
-			.ConfigureAwait(false);
-	}
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (!firstRender)
-			return;
-
-		await _jsRuntime.InitAsync(_id, _innerHtmlChangedInvokable)
 			.ConfigureAwait(false);
 	}
 }
