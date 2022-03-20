@@ -1,10 +1,11 @@
 ﻿@namespace MudBlazor
+@inject IJSRuntime _jsRuntime
 
 <div class="mud-input-control mud-input-input-control">
 	<div class="mud-input-control-input-container">
 
 		<div class="@InputContainerClasses">
-			<div class="@InputClasses" contentEditable="true"></div>
+			<div id="@_id" class="@InputClasses" contentEditable="true"></div>
 
 			@if (Variant == Variant.Outlined)
 			{

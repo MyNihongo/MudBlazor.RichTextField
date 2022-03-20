@@ -2,8 +2,10 @@
 
 // TODO: https://github.com/dotnet/aspnetcore/issues/9974
 // Would be nice to have it implemented
-public partial class MudRichTextField
+public partial class MudRichTextField : IAsyncDisposable
 {
+	private readonly string _id = Guid.NewGuid().ToString();
+
 	[Parameter]
 	public string Label { get; set; } = string.Empty;
 
@@ -34,4 +36,19 @@ public partial class MudRichTextField
 		.AddClass($"mud-input-label-{VariantString}")
 		.AddClass("mud-input-label-inputcontrol")
 		.Build();
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender)
+			return;
+
+		await _jsRuntime.InitAsync(_id)
+			.ConfigureAwait(false);
+	}
+
+	public ValueTask DisposeAsync()
+	{
+		GC.SuppressFinalize(this);
+		return _jsRuntime.UnloadAsync(_id);
+	}
 }
