@@ -3,10 +3,20 @@ MudBlazorRichTextEdit = {
 };
 
 MudBlazorRichTextEdit.init = (elementId) => {
-	console.log(elementId);
-	MudBlazorRichTextEdit.observers[elementId] = () => {
-		console.log("disposed of " + elementId);
+	const target = document.getElementById(elementId);
+	if (!target) {
+		return;
+	}
+
+	const callback = function () {
+		console.log("smth has changed");
 	};
+
+	const observer = new MutationObserver(callback);
+	const config = { childList: true, characterData: true, subtree: true };
+
+	observer.observe(target, config);
+	MudBlazorRichTextEdit.observers[elementId] = () => observer.disconnect();
 }
 
 MudBlazorRichTextEdit.dispose = (elementId) => {
