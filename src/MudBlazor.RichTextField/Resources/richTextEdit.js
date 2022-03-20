@@ -2,6 +2,8 @@ MudBlazorRichTextEdit = {
 	observers: {}
 };
 
+const mudShrink = "mud-shrink";
+
 MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 	const target = document.getElementById(elementId);
 	if (!target) {
@@ -9,6 +11,12 @@ MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 	}
 
 	const callback = async function () {
+		if (target.innerHTML && target.innerHTML !== "<br>") {
+			addMudShrink(target.parentElement);
+		} else {
+			removeMudShrink(target.parentElement);
+		}
+
 		await dotNetInvokable.invokeMethodAsync("SetValue", target.innerHTML);
 	};
 
@@ -19,6 +27,13 @@ MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 	MudBlazorRichTextEdit.observers[elementId] = () => observer.disconnect();
 }
 
+MudBlazorRichTextEdit.setInnerHtml = (elementId, innerHtml) => {
+	const target = document.getElementById(elementId);
+	if (target) {
+		target.innerHTML = innerHtml;
+	}
+}
+
 MudBlazorRichTextEdit.dispose = (elementId) => {
 	var observer = MudBlazorRichTextEdit.observers[elementId];
 	if (!observer) {
@@ -27,4 +42,20 @@ MudBlazorRichTextEdit.dispose = (elementId) => {
 
 	observer();
 	delete MudBlazorRichTextEdit.observers[elementId];
+}
+
+function addMudShrink(element) {
+	if (!element || element.classList.contains(mudShrink)) {
+		return;
+	}
+
+	element.classList.add(mudShrink);
+}
+
+function removeMudShrink(element) {
+	if (!element || !element.classList.contains(mudShrink)) {
+		return;
+	}
+
+	element.classList.remove(mudShrink);
 }

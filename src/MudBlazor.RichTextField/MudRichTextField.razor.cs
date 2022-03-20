@@ -1,4 +1,6 @@
-﻿namespace MudBlazor;
+﻿using System.Diagnostics;
+
+namespace MudBlazor;
 
 // TODO: https://github.com/dotnet/aspnetcore/issues/9974
 // Would be nice to have it implemented
@@ -8,6 +10,7 @@ public partial class MudRichTextField : IAsyncDisposable
 	private readonly DotNetObjectReference<InnerHtmlChangedInvokable> _innerHtmlChangedInvokable;
 
 	private string _value = string.Empty;
+	private bool _hasBeenRendered, _isInternalSet;
 
 	public MudRichTextField()
 	{
@@ -25,7 +28,15 @@ public partial class MudRichTextField : IAsyncDisposable
 	public string Value
 	{
 		get => _value;
-		set => _value = value;
+		set
+		{
+			_value = value;
+
+			if (_hasBeenRendered)
+			{
+				Task.Run(() => SetInnerHtmlFromValueAsync(value));
+			}
+		}
 	}
 
 	[Parameter]
@@ -36,6 +47,7 @@ public partial class MudRichTextField : IAsyncDisposable
 	private string InputContainerClasses => new CssBuilder("mud-input")
 		.AddClass($"mud-input-{VariantString}")
 		.AddClass("mud-input-underline", () => Variant != Variant.Outlined)
+		.AddClass("mud-shrink", () => !string.IsNullOrEmpty(_value))
 		.Build();
 
 	private string InputClasses => new CssBuilder("mud-input-slot")
@@ -50,10 +62,25 @@ public partial class MudRichTextField : IAsyncDisposable
 		.AddClass("mud-input-label-inputcontrol")
 		.Build();
 
+	// Rendering of a MarkupString produces some weird output for MutationObserver (endless comment sections)
+	// For this reason handle everything in JavaScript (kudos...)
+	protected override bool ShouldRender()
+	{
+		return false;
+	}
+
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (!firstRender)
 			return;
+
+		_hasBeenRendered = true;
+
+		if (!string.IsNullOrEmpty(_value))
+		{
+			await SetInnerHtmlFromValueAsync(_value)
+				.ConfigureAwait(false);
+		}
 
 		await _jsRuntime.InitAsync(_id, _innerHtmlChangedInvokable)
 			.ConfigureAwait(false);
@@ -69,9 +96,38 @@ public partial class MudRichTextField : IAsyncDisposable
 
 	internal async Task SetValueFromInnerHtmlAsync(string innerHtml)
 	{
-		_value = innerHtml.FromInnerHtml();
-		
-		await InvokeAsync(() => ValueChanged.InvokeAsync(_value))
-			.ConfigureAwait(false);
+		if (_isInternalSet)
+			return;
+
+		try
+		{
+			_isInternalSet = true;
+			_value = innerHtml.FromInnerHtml();
+
+			await InvokeAsync(() => ValueChanged.InvokeAsync(_value))
+				.ConfigureAwait(false);
+		}
+		finally
+		{
+			_isInternalSet = false;
+		}
+	}
+
+	private async Task SetInnerHtmlFromValueAsync(string value)
+	{
+		if (_isInternalSet)
+			return;
+
+		try
+		{
+			_isInternalSet = true;
+
+			await _jsRuntime.SetInnerHtmlAsync(_id, value)
+				.ConfigureAwait(false);
+		}
+		finally
+		{
+			_isInternalSet = false;
+		}
 	}
 }
