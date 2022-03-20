@@ -5,6 +5,15 @@
 public partial class MudRichTextField : IAsyncDisposable
 {
 	private readonly string _id = Guid.NewGuid().ToString();
+	private readonly DotNetObjectReference<InnerHtmlChangedInvokable> _innerHtmlChangedInvokable;
+
+	private string _value = string.Empty;
+
+	public MudRichTextField()
+	{
+		var invokable = new InnerHtmlChangedInvokable(this);
+		_innerHtmlChangedInvokable = DotNetObjectReference.Create(invokable);
+	}
 
 	[Parameter]
 	public string Label { get; set; } = string.Empty;
@@ -13,7 +22,11 @@ public partial class MudRichTextField : IAsyncDisposable
 	public Variant Variant { get; set; } = Variant.Text;
 
 	[Parameter]
-	public string Value { get; set; } = string.Empty;
+	public string Value
+	{
+		get => _value;
+		set => _value = value;
+	}
 
 	[Parameter]
 	public EventCallback<string> ValueChanged { get; set; }
@@ -37,18 +50,28 @@ public partial class MudRichTextField : IAsyncDisposable
 		.AddClass("mud-input-label-inputcontrol")
 		.Build();
 
+	public ValueTask DisposeAsync()
+	{
+		GC.SuppressFinalize(this);
+
+		_innerHtmlChangedInvokable.Dispose();
+		return _jsRuntime.UnloadAsync(_id);
+	}
+
+	internal async Task SetValueFromInnerHtmlAsync(string innerHtml)
+	{
+		_value = innerHtml.FromInnerHtml();
+		
+		await InvokeAsync(() => ValueChanged.InvokeAsync(_value))
+			.ConfigureAwait(false);
+	}
+
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (!firstRender)
 			return;
 
-		await _jsRuntime.InitAsync(_id)
+		await _jsRuntime.InitAsync(_id, _innerHtmlChangedInvokable)
 			.ConfigureAwait(false);
-	}
-
-	public ValueTask DisposeAsync()
-	{
-		GC.SuppressFinalize(this);
-		return _jsRuntime.UnloadAsync(_id);
 	}
 }

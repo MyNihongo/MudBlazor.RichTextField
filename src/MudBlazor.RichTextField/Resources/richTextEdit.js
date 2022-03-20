@@ -2,14 +2,14 @@ MudBlazorRichTextEdit = {
 	observers: {}
 };
 
-MudBlazorRichTextEdit.init = (elementId) => {
+MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 	const target = document.getElementById(elementId);
 	if (!target) {
 		return;
 	}
 
-	const callback = function () {
-		console.log("smth has changed");
+	const callback = async function () {
+		await dotNetInvokable.invokeMethodAsync("SetValue", target.innerHTML);
 	};
 
 	const observer = new MutationObserver(callback);
