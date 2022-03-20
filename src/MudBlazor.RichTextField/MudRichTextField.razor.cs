@@ -1,5 +1,7 @@
 ﻿namespace MudBlazor;
 
+// TODO: https://github.com/dotnet/aspnetcore/issues/9974
+// Would be nice to have it implemented
 public partial class MudRichTextField
 {
 	[Parameter]
@@ -23,6 +25,7 @@ public partial class MudRichTextField
 
 	private string InputClasses => new CssBuilder("mud-input-slot")
 		.AddClass("mud-input-root")
+		.AddClass("mud-richtextinput-root")
 		.AddClass($"mud-input-root-{VariantString}")
 		.Build();
 

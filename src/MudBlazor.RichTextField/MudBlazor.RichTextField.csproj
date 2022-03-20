@@ -5,19 +5,36 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>MudBlazor</RootNamespace>
+		<Version>0.0.1</Version>
+		<Authors>MyNihongo</Authors>
+		<Description>RichTextField component for MudBlazor (https://mudblazor.com/)</Description>
+		<Copyright>Copyright © 2022 MyNihongo</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/MyNihongo/MudBlazor.RichTextField</RepositoryUrl>
+		<PackageProjectUrl>https://mudblazor.com/</PackageProjectUrl>
+		<PackageIcon>favico.png</PackageIcon>
+		<PackageTags>mudblazor, blazor, richtextfield</PackageTags>
+		<GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+		<PackageReleaseNotes>https://github.com/MyNihongo/MudBlazor.RichTextField/releases</PackageReleaseNotes>
 	</PropertyGroup>
-
-
-	<ItemGroup>
-		<SupportedPlatform Include="browser" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.3" />
 		<PackageReference Include="MudBlazor" Version="6.0.7" />
 	</ItemGroup>
 
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)'=='Release'">
+		<Exec Command="npm run build" />
+	</Target>
+
 	<ItemGroup>
+		<None Include="..\..\favico.png" Pack="true" PackagePath="" />
+		<Content Remove="**\package*.json" />
+		<None Remove="*.csproj.DotSettings" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
