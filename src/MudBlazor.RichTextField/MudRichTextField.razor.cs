@@ -1,5 +1,5 @@
 ﻿namespace MudBlazor;
 
-public class MudRichTextField
+public partial class MudRichTextField
 {
 }
