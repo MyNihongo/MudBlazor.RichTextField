@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace MudBlazor;
+﻿namespace MudBlazor;
 
 // TODO: https://github.com/dotnet/aspnetcore/issues/9974
 // Would be nice to have it implemented
@@ -63,7 +61,7 @@ public partial class MudRichTextField : IAsyncDisposable
 		.Build();
 
 	// Rendering of a MarkupString does not seem to work well wil the MutationObserver (infinite notifications, weird innerHTML output, etc.)
-	// For this reason FiretrUCK blazor rendering and handle everything in JavaScript (kudos...)
+	// For this reason don't use blazor rendering and handle everything in JavaScript (kudos...)
 	protected override bool ShouldRender()
 	{
 		return false;
