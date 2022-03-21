@@ -121,6 +121,7 @@ public partial class MudRichTextField : IAsyncDisposable
 		try
 		{
 			_isInternalSet = true;
+			value = value.ToInnerHtml();
 
 			await _jsRuntime.SetInnerHtmlAsync(_id, value)
 				.ConfigureAwait(false);
