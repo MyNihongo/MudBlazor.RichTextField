@@ -32,7 +32,7 @@ public partial class MudRichTextField : IAsyncDisposable
 		{
 			_value = value;
 
-			if (_hasBeenRendered)
+			if (_hasBeenRendered && !_isInternalSet)
 			{
 				Task.Run(() => SetInnerHtmlFromValueAsync(value));
 			}
@@ -104,7 +104,7 @@ public partial class MudRichTextField : IAsyncDisposable
 			_isInternalSet = true;
 			_value = innerHtml.ToValue();
 
-			await InvokeAsync(async () => await ValueChanged.InvokeAsync(_value).ConfigureAwait(false))
+			await InvokeAsync(() => ValueChanged.InvokeAsync(_value))
 				.ConfigureAwait(false);
 		}
 		finally
