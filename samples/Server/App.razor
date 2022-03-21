@@ -30,7 +30,11 @@
 		_disposable = _themeService.IsDarkTheme
 			.Select(x => x ? Themes.Dark : Themes.Light)
 			.Where(x => x != _currentTheme)
-			.Subscribe(x => _currentTheme = x);
+			.Subscribe(x =>
+			{
+				_currentTheme = x;
+				Task.Run(() => InvokeAsync(StateHasChanged));
+			});
 	}
 
 	protected override Task OnAfterRenderAsync(bool firstRender)
