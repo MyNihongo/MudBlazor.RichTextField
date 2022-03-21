@@ -1,13 +1,44 @@
 ﻿@inherits LayoutComponentBase
+@inject IThemeService _themeService
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudLayout>
+	<MudAppBar Elevation="1">
+		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+		<MudSpacer />
+		<MudTooltip Text="Toggle theme">
+			<MudIconButton Icon="@Icons.Material.Rounded.Brightness4" Color="Color.Inherit" OnClick="@ToggleTheme" />
+		</MudTooltip>
+	</MudAppBar>
 
-    <main>
-        <article class="content">
-            @Body
-        </article>
-    </main>
-</div>
+	<MudDrawer @bind-Open="@_isOpen" Elevation="1">
+		<MudDrawerHeader>
+			<MudText Typo="Typo.h6">RichTextField</MudText>
+		</MudDrawerHeader>
+
+		<MudNavMenu>
+			<MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Material.Rounded.Home">Home</MudNavLink>
+			<MudNavLink Match="NavLinkMatch.All" Href="/counter" Icon="@Icons.Material.Rounded.Add">Library</MudNavLink>
+		</MudNavMenu>
+	</MudDrawer>
+
+	<MudMainContent>
+		<MudContainer>
+			@Body
+		</MudContainer>
+	</MudMainContent>
+</MudLayout>
+
+@code
+{
+	private bool _isOpen;
+
+	private void ToggleDrawer()
+	{
+		_isOpen = !_isOpen;
+	}
+
+	private Task ToggleTheme()
+	{
+		return _themeService.ToggleThemeAsync();
+	}
+}

@@ -1,4 +1,9 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using System.Reactive.Linq
+
+@implements IDisposable
+@inject IThemeService _themeService
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -11,6 +16,32 @@
     </NotFound>
 </Router>
 
-<MudThemeProvider/>
+<MudThemeProvider Theme="_currentTheme" />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
+
+@code
+{
+    private MudTheme _currentTheme = Themes.Light;
+	private IDisposable? _disposable;
+
+	protected override void OnInitialized()
+	{
+		_disposable = _themeService.IsDarkTheme
+			.Select(x => x ? Themes.Dark : Themes.Light)
+			.Where(x => x != _currentTheme)
+			.Subscribe(x => _currentTheme = x);
+	}
+
+	protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+	    return firstRender
+		    ? _themeService.InitAsync()
+		    : Task.CompletedTask;
+    }
+
+	public void Dispose()
+	{
+		_disposable?.Dispose();
+	}
+}

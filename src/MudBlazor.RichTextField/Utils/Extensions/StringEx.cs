@@ -2,21 +2,29 @@
 
 internal static class StringEx
 {
-	private const string Trailing = "</div>", Break = "<br>";
+	private const string Heading = "<div>", Trailing = "</div>", Break = "<br>";
 
 	/// <summary>
 	/// Converts the innerHTML to a normal RichText string
 	/// </summary>
-	public static string FromInnerHtml(this string? @this)
+	public static string ToValue(this string? @this)
 	{
 		if (string.IsNullOrEmpty(@this) || @this == Break)
 			return string.Empty;
 
 		return @this
-			.Replace("<div>", string.Empty)
-			.Replace($"{Break}{Trailing}", Environment.NewLine)
+			.Replace(Heading, string.Empty)
+			.Replace(Break, string.Empty)
 			.RemoveTrailingDiv()
 			.Replace(Trailing, Environment.NewLine);
+	}
+
+	public static string ToInnerHtml(this string? @this)
+	{
+		if (string.IsNullOrEmpty(@this))
+			return Break;
+
+		return Heading + @this + Trailing;
 	}
 
 	private static string RemoveTrailingDiv(this string @this)

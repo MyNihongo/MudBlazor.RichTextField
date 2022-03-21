@@ -1,4 +1,6 @@
-﻿namespace MudBlazor.RichTextField.Tests.Utils.StringExTests;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace MudBlazor.RichTextField.Tests.Utils.StringExTests;
 
 public sealed class FromInnerHtmlShould
 {
@@ -7,7 +9,7 @@ public sealed class FromInnerHtmlShould
 	{
 		const string inputValue = nameof(inputValue);
 
-		var result = inputValue.FromInnerHtml();
+		var result = inputValue.ToValue();
 
 		result
 			.Should()

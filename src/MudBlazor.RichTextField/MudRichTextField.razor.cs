@@ -62,8 +62,8 @@ public partial class MudRichTextField : IAsyncDisposable
 		.AddClass("mud-input-label-inputcontrol")
 		.Build();
 
-	// Rendering of a MarkupString produces some weird output for MutationObserver (endless comment sections)
-	// For this reason handle everything in JavaScript (kudos...)
+	// Rendering of a MarkupString does not seem to work well wil the MutationObserver (infinite notifications, weird innerHTML output, etc.)
+	// For this reason FiretrUCK blazor rendering and handle everything in JavaScript (kudos...)
 	protected override bool ShouldRender()
 	{
 		return false;
@@ -102,7 +102,7 @@ public partial class MudRichTextField : IAsyncDisposable
 		try
 		{
 			_isInternalSet = true;
-			_value = innerHtml.FromInnerHtml();
+			_value = innerHtml.ToValue();
 
 			await InvokeAsync(() => ValueChanged.InvokeAsync(_value))
 				.ConfigureAwait(false);

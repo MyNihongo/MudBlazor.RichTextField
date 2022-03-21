@@ -1,3 +1,4 @@
+using MudBlazor.RichTextField;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
+builder.Services.AddMudServices().AddSamplesCore();
 
 var app = builder.Build();
 

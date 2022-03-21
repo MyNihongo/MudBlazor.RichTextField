@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField.Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField", "..\src\MudBlazor.RichTextField\MudBlazor.RichTextField.csproj", "{7C56DB42-4DB0-4BE1-B453-B07FBDA49626}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2ADFF2EA-96ED-482B-AAEB-A51728008221}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField.Tests", "..\tests\MudBlazor.RichTextField.Tests\MudBlazor.RichTextField.Tests.csproj", "{BBF8BA6D-176A-449D-8F01-706493CD3D78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBlazor.RichTextField.Tests", "..\tests\MudBlazor.RichTextField.Tests\MudBlazor.RichTextField.Tests.csproj", "{BBF8BA6D-176A-449D-8F01-706493CD3D78}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{715D9363-8E7D-4D26-98AA-9D10F13E180F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBlazor.RichTextField.Sample.Core", "MudBlazor.RichTextField.Sample.Core\MudBlazor.RichTextField.Sample.Core.csproj", "{21A3857F-6821-4159-A552-B39E56CC27B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +31,17 @@ Global
 		{BBF8BA6D-176A-449D-8F01-706493CD3D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBF8BA6D-176A-449D-8F01-706493CD3D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBF8BA6D-176A-449D-8F01-706493CD3D78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{BBF8BA6D-176A-449D-8F01-706493CD3D78} = {2ADFF2EA-96ED-482B-AAEB-A51728008221}
+		{7C56DB42-4DB0-4BE1-B453-B07FBDA49626} = {715D9363-8E7D-4D26-98AA-9D10F13E180F}
+		{BBF8BA6D-176A-449D-8F01-706493CD3D78} = {715D9363-8E7D-4D26-98AA-9D10F13E180F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {40C12540-91EC-4831-A2BF-424661D40BAF}

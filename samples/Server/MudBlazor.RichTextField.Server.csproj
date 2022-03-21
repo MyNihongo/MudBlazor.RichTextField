@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MudBlazor.RichTextField\MudBlazor.RichTextField.csproj" />
+    <ProjectReference Include="..\MudBlazor.RichTextField.Sample.Core\MudBlazor.RichTextField.Sample.Core.csproj" />
   </ItemGroup>
 
 </Project>
