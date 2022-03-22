@@ -59,13 +59,24 @@ internal static class StringEx
 		if (string.IsNullOrEmpty(@this))
 			return Break;
 
-		const string newLine = Trailing + Heading;
+		var builder = StringBuilderPool.Get()
+			.Append(Heading);
 
-		@this = @this
-			.Replace(Environment.NewLine, newLine)
-			.Replace("\n", newLine);
+		var lineStart = 0;
 
-		return Heading + @this + Trailing;
+		for (var i = 0; i < @this.Length; i++)
+		{
+			if (StartsWith(@this, Environment.NewLine, i))
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		if (lineStart < @this.Length)
+			builder.Append(@this[lineStart..]);
+
+		return builder.Append(Trailing)
+			.ToString();
 	}
 
 	private static bool StartsWith(in string @this, in string value, in int start)

@@ -2,6 +2,19 @@
 
 public sealed class ToValueShould
 {
+	[Theory]
+	[InlineData(null)]
+	[InlineData("")]
+	[InlineData("<br>")]
+	public void BeEmptyIfEmpty(string? input)
+	{
+		var result = input.ToValue();
+
+		result
+			.Should()
+			.BeEmpty();
+	}
+
 	[Fact]
 	public void NotChangeIfNoTags()
 	{
