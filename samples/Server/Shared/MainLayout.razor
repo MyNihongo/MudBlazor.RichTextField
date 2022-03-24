@@ -5,18 +5,18 @@
 
 <MudRTLProvider @bind-RightToLeft="_isRightToLeft">
 	<MudLayout>
-		<MudAppBar Elevation="1">
+		<MudAppBar Elevation="3">
 			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
-			<MudSpacer />
+			<MudSpacer/>
 			<MudTooltip Text="Toggle theme">
-				<MudIconButton Icon="@Icons.Material.Rounded.Brightness4" Color="Color.Inherit" OnClick="@ToggleTheme" />
+				<MudIconButton Icon="@Icons.Material.Rounded.Brightness4" Color="Color.Inherit" OnClick="@ToggleTheme"/>
 			</MudTooltip>
 			<MudTooltip Text="Toggle RTL">
-				<MudIconButton Icon="@Icons.Material.Rounded.FormatTextdirectionRToL" Color="Color.Inherit" OnClick="@ToggleRightToLeft" />
+				<MudIconButton Icon="@Icons.Material.Rounded.FormatTextdirectionRToL" Color="Color.Inherit" OnClick="@ToggleRightToLeft"/>
 			</MudTooltip>
 		</MudAppBar>
 
-		<MudDrawer @bind-Open="@_isOpen" Elevation="1" Variant="DrawerVariant.Mini">
+		<MudDrawer @bind-Open="@_isOpen" Elevation="5" Variant="DrawerVariant.Mini" ClipMode="DrawerClipMode.Always">
 			<MudNavMenu>
 				<MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Material.Rounded.Home">Home</MudNavLink>
 				<MudNavLink Match="NavLinkMatch.All" Href="/counter" Icon="@Icons.Material.Rounded.Add">Library</MudNavLink>
