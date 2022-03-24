@@ -1,0 +1,69 @@
+﻿@inherits LayoutComponentBase
+@implements IDisposable
+
+@inject IThemeService _themeService
+
+<MudRTLProvider @bind-RightToLeft="_isRightToLeft">
+	<MudLayout>
+		<MudAppBar Elevation="3">
+			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+			<MudSpacer/>
+			<MudTooltip Text="Toggle theme">
+				<MudIconButton Icon="@Icons.Material.Rounded.Brightness4" Color="Color.Inherit" OnClick="@ToggleTheme"/>
+			</MudTooltip>
+			<MudTooltip Text="Toggle RTL">
+				<MudIconButton Icon="@Icons.Material.Rounded.FormatTextdirectionRToL" Color="Color.Inherit" OnClick="@ToggleRightToLeft"/>
+			</MudTooltip>
+		</MudAppBar>
+
+		<MudDrawer @bind-Open="@_isOpen" Elevation="5" Variant="DrawerVariant.Mini" ClipMode="DrawerClipMode.Always">
+			<MudNavMenu>
+				<MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Material.Rounded.Home">Home</MudNavLink>
+				<MudNavLink Match="NavLinkMatch.All" Href="/counter" Icon="@Icons.Material.Rounded.Add">Library</MudNavLink>
+			</MudNavMenu>
+		</MudDrawer>
+
+		<MudMainContent>
+			<MudContainer>
+				@Body
+			</MudContainer>
+		</MudMainContent>
+	</MudLayout>
+</MudRTLProvider>
+
+@code
+{
+	private bool _isOpen, _isRightToLeft;
+	private IDisposable? _disposable;
+
+	protected override void OnInitialized()
+	{
+		_disposable = _themeService.IsRightToLeft
+			.Where(x => x != _isRightToLeft)
+			.Subscribe(x =>
+			{
+				_isRightToLeft = x;
+				Task.Run(() => InvokeAsync(StateHasChanged));
+			});
+	}
+
+	private void ToggleDrawer()
+	{
+		_isOpen = !_isOpen;
+	}
+
+	private Task ToggleTheme()
+	{
+		return _themeService.ToggleThemeAsync();
+	}
+
+	private Task ToggleRightToLeft()
+	{
+		return _themeService.ToggleRightToLeftAsync();
+	}
+
+	public void Dispose()
+	{
+		_disposable?.Dispose();
+	}
+}

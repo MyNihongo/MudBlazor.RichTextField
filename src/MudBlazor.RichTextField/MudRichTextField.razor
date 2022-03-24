@@ -1,0 +1,21 @@
+﻿@namespace MudBlazor
+@inject IJSRuntime _jsRuntime
+
+<div class="mud-input-control mud-input-input-control">
+	<div class="mud-input-control-input-container">
+
+		<div class="@InputContainerClasses">
+			<div id="@_id" class="@InputClasses" contentEditable="true"></div>
+
+			@if (Variant == Variant.Outlined)
+			{
+				<div class="mud-input-outlined-border"></div>
+			}
+		</div>
+
+		@if (!string.IsNullOrEmpty(Label))
+		{
+			<label class="@LabelClasses">@Label</label>
+		}
+	</div>
+</div>

@@ -1,0 +1,11 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+<MudText Typo="Typo.h2">Hello, 世界</MudText>
+
+<MudRichTextField @bind-Value="RichTextValue" Label="Test" Variant="Variant.Filled" />
+
+@code
+{
+	public string RichTextValue { get; set; } = "leatherman" + Environment.NewLine + "<i>do you like what you see?</i>" + Environment.NewLine + Environment.NewLine + "<b>that turns me on</b>";
+}

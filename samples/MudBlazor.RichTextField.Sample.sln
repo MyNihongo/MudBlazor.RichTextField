@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField.Server", "Server\MudBlazor.RichTextField.Server.csproj", "{BDEAAC32-41B2-4504-B39B-574836396E52}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField", "..\src\MudBlazor.RichTextField\MudBlazor.RichTextField.csproj", "{7C56DB42-4DB0-4BE1-B453-B07FBDA49626}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField.Tests", "..\tests\MudBlazor.RichTextField.Tests\MudBlazor.RichTextField.Tests.csproj", "{BBF8BA6D-176A-449D-8F01-706493CD3D78}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{715D9363-8E7D-4D26-98AA-9D10F13E180F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBlazor.RichTextField.Sample.Core", "MudBlazor.RichTextField.Sample.Core\MudBlazor.RichTextField.Sample.Core.csproj", "{21A3857F-6821-4159-A552-B39E56CC27B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDEAAC32-41B2-4504-B39B-574836396E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEAAC32-41B2-4504-B39B-574836396E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEAAC32-41B2-4504-B39B-574836396E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEAAC32-41B2-4504-B39B-574836396E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C56DB42-4DB0-4BE1-B453-B07FBDA49626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C56DB42-4DB0-4BE1-B453-B07FBDA49626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C56DB42-4DB0-4BE1-B453-B07FBDA49626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C56DB42-4DB0-4BE1-B453-B07FBDA49626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBF8BA6D-176A-449D-8F01-706493CD3D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBF8BA6D-176A-449D-8F01-706493CD3D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBF8BA6D-176A-449D-8F01-706493CD3D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBF8BA6D-176A-449D-8F01-706493CD3D78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21A3857F-6821-4159-A552-B39E56CC27B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C56DB42-4DB0-4BE1-B453-B07FBDA49626} = {715D9363-8E7D-4D26-98AA-9D10F13E180F}
+		{BBF8BA6D-176A-449D-8F01-706493CD3D78} = {715D9363-8E7D-4D26-98AA-9D10F13E180F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {40C12540-91EC-4831-A2BF-424661D40BAF}
+	EndGlobalSection
+EndGlobal
