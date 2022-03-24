@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\MudBlazor.RichTextField\MudBlazor.RichTextField.csproj" />
+		<ProjectReference Include="..\..\src\MudBlazor.RichTextField\MudBlazor.RichTextField.csproj" />
 	</ItemGroup>
 
 </Project>
