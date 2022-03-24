@@ -35,7 +35,11 @@ public sealed class ToInnerHtmlShould
 		var input = "line1" + Environment.NewLine + "line2";
 		const string expected = "<div>line1</div><div>line2</div>";
 
-		throw new NotImplementedException();
+		var result = input.ToInnerHtml();
+
+		result
+			.Should()
+			.Be(expected);
 	}
 
 	[Fact]
@@ -44,7 +48,11 @@ public sealed class ToInnerHtmlShould
 		var input = "line1" + Environment.NewLine + "line2" + Environment.NewLine + "line3";
 		const string expected = "<div>line1</div><div>line2</div><div>line3</div>";
 
-		throw new NotImplementedException();
+		var result = input.ToInnerHtml();
+
+		result
+			.Should()
+			.Be(expected);
 	}
 
 	[Fact]
