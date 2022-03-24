@@ -1,4 +1,4 @@
-name: Build MudBlazor.Markdown
+name: Build MudBlazor.RichTextField
 
 on:
   push:
@@ -31,11 +31,11 @@ jobs:
       with:
         node-version: 16.x
         cache: 'npm'
-        cache-dependency-path: src/MudBlazor.Markdown/package-lock.json
+        cache-dependency-path: src/MudBlazor.RichTextField/package-lock.json
       
     - name: Setup npm packages
       run: npm ci
-      working-directory: src/MudBlazor.Markdown
+      working-directory: src/MudBlazor.RichTextField
           
     - name: NuGet restore
       run: dotnet restore
