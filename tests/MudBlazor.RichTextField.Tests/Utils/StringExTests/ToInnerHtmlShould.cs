@@ -61,16 +61,24 @@ public sealed class ToInnerHtmlShould
 		var input = Environment.NewLine + "line2" + Environment.NewLine + "line3";
 		const string expected = "<div><br></div><div>line2</div><div>line3</div>";
 
-		throw new NotImplementedException();
+		var result = input.ToInnerHtml();
+
+		result
+			.Should()
+			.Be(expected);
 	}
 
 	[Fact]
 	public void ConvertSecondEmpty()
 	{
-		var input = "line1" + Environment.NewLine + "line3";
+		var input = "line1" + Environment.NewLine + Environment.NewLine + "line3";
 		const string expected = "<div>line1</div><div><br></div><div>line3</div>";
 
-		throw new NotImplementedException();
+		var result = input.ToInnerHtml();
+
+		result
+			.Should()
+			.Be(expected);
 	}
 
 	[Fact]
@@ -79,24 +87,36 @@ public sealed class ToInnerHtmlShould
 		var input = "line1" + Environment.NewLine + "line2" + Environment.NewLine + Environment.NewLine;
 		const string expected = "<div>line1</div><div>line2</div><div><br></div>";
 
-		throw new NotImplementedException();
+		var result = input.ToInnerHtml();
+
+		result
+			.Should()
+			.Be(expected);
 	}
 
 	[Fact]
 	public void KeepItalic()
 	{
 		var input = "some <i>italic</i> value" + Environment.NewLine + "new <i>line</i>";
-		const string expected = "some <i>italic</i> value<div>new <i>line</i></div>";
+		const string expected = "<div>some <i>italic</i> value</div><div>new <i>line</i></div>";
 
-		throw new NotImplementedException();
+		var result = input.ToInnerHtml();
+
+		result
+			.Should()
+			.Be(expected);
 	}
 
 	[Fact]
 	public void KeepBold()
 	{
 		var input = "some <b>italic</b> value" + Environment.NewLine + "new <b>line</b>";
-		const string expected = "some <b>italic</b> value<div>new <b>line</b></div>";
+		const string expected = "<div>some <b>italic</b> value</div><div>new <b>line</b></div>";
 
-		throw new NotImplementedException();
+		var result = input.ToInnerHtml();
+
+		result
+			.Should()
+			.Be(expected);
 	}
 }

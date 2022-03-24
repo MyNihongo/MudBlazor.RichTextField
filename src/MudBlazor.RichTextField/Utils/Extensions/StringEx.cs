@@ -62,14 +62,21 @@ internal static class StringEx
 		var builder = StringBuilderPool.Get()
 			.Append(Heading);
 
+		var lineStart = 0;
 		var newLine = Environment.NewLine;
 
-		for (var i = 0; i < @this.Length; i++)
+		for (var i = lineStart; i < @this.Length; i++)
 		{
 			if (StartsWith(@this, newLine, i))
 			{
-				builder.Append(Trailing).Append(Heading);
-				i += newLine.Length - 1;
+				if (lineStart == i)
+					builder.Append(Break);
+
+				lineStart = i + newLine.Length;
+				i = lineStart - 1;
+
+				if (lineStart < @this.Length)
+					builder.Append(Trailing).Append(Heading);
 			}
 			else
 			{
