@@ -16,11 +16,7 @@
 			</MudTooltip>
 		</MudAppBar>
 
-		<MudDrawer @bind-Open="@_isOpen" Elevation="1">
-			<MudDrawerHeader>
-				<MudText Typo="Typo.h6">RichTextField</MudText>
-			</MudDrawerHeader>
-
+		<MudDrawer @bind-Open="@_isOpen" Elevation="1" Variant="DrawerVariant.Mini">
 			<MudNavMenu>
 				<MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Material.Rounded.Home">Home</MudNavLink>
 				<MudNavLink Match="NavLinkMatch.All" Href="/counter" Icon="@Icons.Material.Rounded.Add">Library</MudNavLink>
