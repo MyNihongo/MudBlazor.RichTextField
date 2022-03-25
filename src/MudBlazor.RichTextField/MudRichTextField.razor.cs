@@ -71,7 +71,7 @@ public partial class MudRichTextField : IAsyncDisposable
 		.AddClass("mud-input-label-animated")
 		.AddClass($"mud-input-label-{VariantString}")
 		.AddClass("mud-input-label-inputcontrol")
-		.AddClass("mud-input-label-richtext")
+		.AddClass("mud-input-label-richtext", HasToolbar)
 		.Build();
 
 	// Rendering of a MarkupString does not seem to work well wil the MutationObserver (infinite notifications, weird innerHTML output, etc.)
