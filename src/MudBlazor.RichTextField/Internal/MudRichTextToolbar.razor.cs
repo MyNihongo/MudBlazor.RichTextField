@@ -1,4 +1,4 @@
-﻿namespace MudBlazor;
+﻿namespace MudBlazor.Internal;
 
 public sealed partial class MudRichTextToolbar : ComponentBase
 {
