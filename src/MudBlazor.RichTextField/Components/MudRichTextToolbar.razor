@@ -3,11 +3,17 @@
 <MudToolBar Class="mud-toolbar-richtext">
 	@if (TextField.HasBold)
 	{
-		<MudIconButton Icon="@Icons.Material.Rounded.FormatBold"/>
+		<MudToggleIconButton Icon="@Icons.Material.Rounded.FormatBold"
+		                     ToggledIcon="@Icons.Material.Rounded.FormatBold"
+		                     ToggledColor="@Color.Primary"
+		                     @bind-Toggled="IsBoldActive"/>
 	}
 
 	@if (TextField.HasItalic)
 	{
-		<MudIconButton Icon="@Icons.Material.Rounded.FormatItalic"/>
+		<MudToggleIconButton Icon="@Icons.Material.Rounded.FormatItalic"
+		                     ToggledIcon="@Icons.Material.Rounded.FormatItalic"
+		                     ToggledColor="@Color.Primary"
+		                     @bind-Toggled="IsItalicActive"/>
 	}
 </MudToolBar>
