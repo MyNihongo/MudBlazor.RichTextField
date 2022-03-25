@@ -8,17 +8,7 @@
 			
 			@if (HasToolbar)
 			{
-				<MudToolBar Class="@ToolbarClasses">
-					@if (HasBold)
-					{
-						<MudIconButton Icon="@Icons.Material.Rounded.FormatBold"/>
-					}
-
-					@if (HasItalic)
-					{
-						<MudIconButton Icon="@Icons.Material.Rounded.FormatItalic"/>
-					}
-				</MudToolBar>
+				<MudRichTextToolbar TextField="this" />
 			}
 
 			<div id="@_id" class="@InputClasses" contentEditable="true"></div>

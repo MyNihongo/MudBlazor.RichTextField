@@ -56,10 +56,6 @@ public partial class MudRichTextField : IAsyncDisposable
 		.AddClass("mud-shrink", !string.IsNullOrEmpty(_value))
 		.Build();
 
-	private string ToolbarClasses => new CssBuilder()
-		.AddClass("mud-toolbar-richtext", HasToolbar)
-		.Build();
-
 	private string InputClasses => new CssBuilder("mud-input-slot")
 		.AddClass("mud-input-root")
 		.AddClass("mud-input-root-richtext")

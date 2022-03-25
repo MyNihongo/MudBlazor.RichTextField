@@ -1,0 +1,13 @@
+﻿@namespace MudBlazor
+
+<MudToolBar Class="mud-toolbar-richtext">
+	@if (TextField.HasBold)
+	{
+		<MudIconButton Icon="@Icons.Material.Rounded.FormatBold"/>
+	}
+
+	@if (TextField.HasItalic)
+	{
+		<MudIconButton Icon="@Icons.Material.Rounded.FormatItalic"/>
+	}
+</MudToolBar>
