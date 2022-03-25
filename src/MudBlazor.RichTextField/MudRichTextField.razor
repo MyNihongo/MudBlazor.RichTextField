@@ -5,6 +5,22 @@
 	<div class="mud-input-control-input-container">
 
 		<div class="@InputContainerClasses">
+			
+			@if (HasToolbar)
+			{
+				<MudToolBar Class="@ToolbarClasses">
+					@if (HasBold)
+					{
+						<MudIconButton Icon="@Icons.Material.Rounded.FormatBold"/>
+					}
+
+					@if (HasItalic)
+					{
+						<MudIconButton Icon="@Icons.Material.Rounded.FormatItalic"/>
+					}
+				</MudToolBar>
+			}
+
 			<div id="@_id" class="@InputClasses" contentEditable="true"></div>
 
 			@if (Variant == Variant.Outlined)

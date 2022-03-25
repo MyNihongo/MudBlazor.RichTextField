@@ -23,6 +23,12 @@ public partial class MudRichTextField : IAsyncDisposable
 	public Variant Variant { get; set; } = Variant.Text;
 
 	[Parameter]
+	public bool HasBold { get; set; } = true;
+
+	[Parameter]
+	public bool HasItalic { get; set; } = true;
+
+	[Parameter]
 	public string Value
 	{
 		get => _value;
@@ -42,15 +48,22 @@ public partial class MudRichTextField : IAsyncDisposable
 
 	private string VariantString => Variant.ToString().ToLower();
 
+	private bool HasToolbar => HasBold || HasItalic;
+
 	private string InputContainerClasses => new CssBuilder("mud-input")
 		.AddClass($"mud-input-{VariantString}")
-		.AddClass("mud-input-underline", () => Variant != Variant.Outlined)
-		.AddClass("mud-shrink", () => !string.IsNullOrEmpty(_value))
+		.AddClass("mud-input-underline", Variant != Variant.Outlined)
+		.AddClass("mud-shrink", !string.IsNullOrEmpty(_value))
+		.Build();
+
+	private string ToolbarClasses => new CssBuilder()
+		.AddClass("mud-toolbar-richtext", HasToolbar)
 		.Build();
 
 	private string InputClasses => new CssBuilder("mud-input-slot")
 		.AddClass("mud-input-root")
-		.AddClass("mud-richtextinput-root")
+		.AddClass("mud-input-root-richtext")
+		.AddClass("mud-input-root-richtext-toolbar", HasToolbar)
 		.AddClass($"mud-input-root-{VariantString}")
 		.Build();
 
@@ -58,6 +71,7 @@ public partial class MudRichTextField : IAsyncDisposable
 		.AddClass("mud-input-label-animated")
 		.AddClass($"mud-input-label-{VariantString}")
 		.AddClass("mud-input-label-inputcontrol")
+		.AddClass("mud-input-label-richtext")
 		.Build();
 
 	// Rendering of a MarkupString does not seem to work well wil the MutationObserver (infinite notifications, weird innerHTML output, etc.)
