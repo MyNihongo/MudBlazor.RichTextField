@@ -1,16 +1,18 @@
 MudBlazorRichTextEdit = {
-	observers: {}
+	observers: {},
+	selections: {}
 };
 
 const mudShrink = "mud-shrink";
 
+// https://codesandbox.io/s/caret-coordinates-index-contenteditable-9tq3o?from-embed
 MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 	const target = document.getElementById(elementId);
 	if (!target) {
 		return;
 	}
 
-	const callback = async function () {
+	const onInnerHtmlChanged = async function () {
 		if (target.innerHTML && target.innerHTML !== "<br>") {
 			addMudShrink(target.parentElement);
 		} else {
@@ -20,11 +22,31 @@ MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 		await dotNetInvokable.invokeMethodAsync("SetValue", target.innerHTML);
 	};
 
-	const observer = new MutationObserver(callback);
+	const onClick = function(e) {
+		console.log(window.getSelection(), e.target);
+	};
+
+	const onKeyUp = function() {
+		console.log("keyup");
+	};
+
+	const observer = new MutationObserver(onInnerHtmlChanged);
 	const config = { childList: true, characterData: true, subtree: true };
 
 	observer.observe(target, config);
-	MudBlazorRichTextEdit.observers[elementId] = () => observer.disconnect();
+	target.addEventListener("click", onClick);
+	target.addEventListener("keyup", onKeyUp);
+
+	MudBlazorRichTextEdit.observers[elementId] = () => {
+		target.removeEventListener("keyup", onKeyUp);
+		target.removeEventListener("click", onClick);
+		observer.disconnect();
+
+		const selection = MudBlazorRichTextEdit.selections[elementId];
+		if (selection) {
+			delete MudBlazorRichTextEdit.selections[elementId];
+		}
+	};
 }
 
 MudBlazorRichTextEdit.setInnerHtml = (elementId, innerHtml) => {
@@ -36,12 +58,16 @@ MudBlazorRichTextEdit.setInnerHtml = (elementId, innerHtml) => {
 
 MudBlazorRichTextEdit.dispose = (elementId) => {
 	var observer = MudBlazorRichTextEdit.observers[elementId];
-	if (!observer) {
-		return;
+	if (observer) {
+		observer();
+		delete MudBlazorRichTextEdit.observers[elementId];
 	}
+}
 
-	observer();
-	delete MudBlazorRichTextEdit.observers[elementId];
+function setCurrentSelection(elementId, target) {
+	MudBlazorRichTextEdit.selections[elementId] = {
+		target: target
+	};
 }
 
 function addMudShrink(element) {
