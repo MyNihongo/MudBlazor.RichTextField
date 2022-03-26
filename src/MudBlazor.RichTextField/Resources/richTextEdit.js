@@ -5,7 +5,6 @@ MudBlazorRichTextEdit = {
 
 const mudShrink = "mud-shrink";
 
-// https://codesandbox.io/s/caret-coordinates-index-contenteditable-9tq3o?from-embed
 MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 	const target = document.getElementById(elementId);
 	if (!target) {
@@ -105,11 +104,29 @@ async function setFormatSelectionAsync(target, dotNetInvokable) {
 
 	// RichText root always has the ID
 	while (target.parentElement && !target.parentElement.id) {
-		console.log(target.tagName);
+		if (target.tagName === "B") {
+			isBoldActive = true;
+
+			if (isItalicActive) {
+				break;
+			}
+		} else if (target.tagName === "I") {
+			isItalicActive = true;
+
+			if (isBoldActive) {
+				break;
+			}
+		}
+
 		target = target.parentElement;
 	}
 
-	console.log("end", target.tagName);
+	const toolbarOptions = {
+		isBoldActive: isBoldActive,
+		isItalicActive: isItalicActive
+	};
+
+	await dotNetInvokable.invokeMethodAsync("SetToolbarOptions", toolbarOptions);
 }
 
 function addMudShrink(element) {
