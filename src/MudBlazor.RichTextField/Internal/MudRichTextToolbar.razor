@@ -1,10 +1,13 @@
-﻿<MudToolBar Class="mud-toolbar-richtext">
+﻿@inject IJSRuntime _jsRuntime
+
+<MudToolBar Class="mud-toolbar-richtext">
 	@if (TextField.HasBold)
 	{
 		<MudToggleIconButton Icon="@Icons.Material.Rounded.FormatBold"
 		                     ToggledIcon="@Icons.Material.Rounded.FormatBold"
 		                     ToggledColor="@Color.Primary"
-		                     @bind-Toggled="IsBoldActive"/>
+		                     Toggled="IsBoldActive"
+		                     ToggledChanged="@OnBoldChangedAsync"/>
 	}
 
 	@if (TextField.HasItalic)
@@ -12,7 +15,8 @@
 		<MudToggleIconButton Icon="@Icons.Material.Rounded.FormatItalic"
 		                     ToggledIcon="@Icons.Material.Rounded.FormatItalic"
 		                     ToggledColor="@Color.Primary"
-		                     @bind-Toggled="IsItalicActive"/>
+		                     Toggled="IsItalicActive"
+		                     ToggledChanged="@OnItalicChangedAsync"/>
 	}
 	
 	@if (TextField.HasUnderline)
@@ -20,6 +24,25 @@
 		<MudToggleIconButton Icon="@Icons.Material.Rounded.FormatUnderlined"
 		                     ToggledIcon="@Icons.Material.Rounded.FormatUnderlined"
 		                     ToggledColor="@Color.Primary"
-		                     @bind-Toggled="IsUnderlineActive"/>
+		                     Toggled="IsUnderlineActive"
+		                     ToggledChanged="@OnUnderlineChangedAsync"/>
 	}
 </MudToolBar>
+
+@code
+{
+	private async Task OnBoldChangedAsync(bool isActive)
+	{
+		IsBoldActive = isActive;
+	}
+
+	private async Task OnItalicChangedAsync(bool isActive)
+	{
+		IsItalicActive = isActive;
+	}
+
+	private async Task OnUnderlineChangedAsync(bool isActive)
+	{
+		IsUnderlineActive = isActive;
+	}
+}

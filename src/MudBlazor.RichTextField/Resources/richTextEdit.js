@@ -57,6 +57,21 @@ MudBlazorRichTextEdit.setInnerHtml = (elementId, innerHtml) => {
 	}
 }
 
+MudBlazorRichTextEdit.applyFormatting = (elementId, formatType) => {
+	const selection = MudBlazorRichTextEdit.selections[elementId];
+	if (!selection) {
+		return;
+	}
+
+	const range = document.createRange();
+	range.setStart(selection.endContainer, selection.endSelection);
+	range.collapse(true);
+
+	const windowSelection = window.getSelection();
+	windowSelection.removeAllRanges();
+	windowSelection.addRange(range);
+}
+
 MudBlazorRichTextEdit.dispose = (elementId) => {
 	var observer = MudBlazorRichTextEdit.observers[elementId];
 	if (observer) {
