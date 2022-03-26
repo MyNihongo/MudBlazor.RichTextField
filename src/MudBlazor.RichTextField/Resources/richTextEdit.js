@@ -72,22 +72,26 @@ function setCurrentSelection(elementId) {
 	}
 
 	const range = selection.getRangeAt(0);
-	const target = range.startContainer instanceof Element
-		? range.startContainer
-		: range.startContainer.parentElement;
-
-	const caretPosition = range.startOffset;
 	const prevSelection = MudBlazorRichTextEdit.selections[elementId];
 
 	MudBlazorRichTextEdit.selections[elementId] = {
-		target: target,
-		caretPosition: caretPosition
+		startContainer: range.startContainer,
+		startSelection: range.startOffset,
+		endContainer: range.endContainer,
+		endSelection: range.endOffset
 	};
 
-	if (!prevSelection || prevSelection.target !== target) {
-		return target;
+	const currentElement = getSelectionElement(range.startContainer);
+
+	if (prevSelection) {
+		const prevElement = getSelectionElement(prevSelection);
+		if (currentElement === prevElement) {
+			return undefined;
+		} else {
+			return currentElement;
+		}
 	} else {
-		return undefined;
+		return currentElement;
 	}
 }
 
@@ -139,4 +143,10 @@ function removeMudShrink(element) {
 	}
 
 	element.classList.remove(mudShrink);
+}
+
+function getSelectionElement(container) {
+	return container instanceof Element
+		? container
+		: container.parentElement;
 }
