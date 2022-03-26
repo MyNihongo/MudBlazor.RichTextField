@@ -21,8 +21,8 @@ MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 		await dotNetInvokable.invokeMethodAsync("SetValue", target.innerHTML);
 	};
 
-	const onClick = async function (e) {
-		const selectionTarget = setCurrentSelection(elementId, e.target);
+	const onClick = async function () {
+		const selectionTarget = setCurrentSelection(elementId);
 		await setFormatSelectionAsync(selectionTarget, dotNetInvokable);
 	};
 
@@ -65,24 +65,20 @@ MudBlazorRichTextEdit.dispose = (elementId) => {
 	}
 }
 
-function setCurrentSelection(elementId, target) {
+function setCurrentSelection(elementId) {
 	const selection = window.getSelection();
 	if (selection.rangeCount === 0) {
 		return undefined;
 	}
 
 	const range = selection.getRangeAt(0);
-	if (!target) {
-		if (range.startContainer instanceof Element) {
-			target = range.startContainer;
-		} else {
-			target = range.startContainer.parentElement;
-		}
-	}
-
-	const prevSelection = MudBlazorRichTextEdit.selections[elementId];
+	const target = range.startContainer instanceof Element
+		? range.startContainer
+		: range.startContainer.parentElement;
 
 	const caretPosition = range.startOffset;
+	const prevSelection = MudBlazorRichTextEdit.selections[elementId];
+
 	MudBlazorRichTextEdit.selections[elementId] = {
 		target: target,
 		caretPosition: caretPosition
