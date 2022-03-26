@@ -22,12 +22,14 @@ MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 		await dotNetInvokable.invokeMethodAsync("SetValue", target.innerHTML);
 	};
 
-	const onClick = function (e) {
-		setCurrentSelection(elementId, e.target);
+	const onClick = async function (e) {
+		const selectionTarget = setCurrentSelection(elementId, e.target);
+		await setFormatSelectionAsync(selectionTarget, dotNetInvokable);
 	};
 
-	const onKeyUp = function() {
-		setCurrentSelection(elementId);
+	const onKeyUp = async function() {
+		const selectionTarget = setCurrentSelection(elementId);
+		await setFormatSelectionAsync(selectionTarget, dotNetInvokable);
 	};
 
 	const observer = new MutationObserver(onInnerHtmlChanged);
@@ -67,7 +69,7 @@ MudBlazorRichTextEdit.dispose = (elementId) => {
 function setCurrentSelection(elementId, target) {
 	const selection = window.getSelection();
 	if (selection.rangeCount === 0) {
-		return;
+		return undefined;
 	}
 
 	const range = selection.getRangeAt(0);
@@ -79,11 +81,35 @@ function setCurrentSelection(elementId, target) {
 		}
 	}
 
+	const prevSelection = MudBlazorRichTextEdit.selections[elementId];
+
 	const caretPosition = range.startOffset;
 	MudBlazorRichTextEdit.selections[elementId] = {
 		target: target,
 		caretPosition: caretPosition
 	};
+
+	if (!prevSelection || prevSelection.target !== target) {
+		return target;
+	} else {
+		return undefined;
+	}
+}
+
+async function setFormatSelectionAsync(target, dotNetInvokable) {
+	if (!target) {
+		return;
+	}
+
+	let isBoldActive = false, isItalicActive = false;
+
+	// RichText root always has the ID
+	while (target.parentElement && !target.parentElement.id) {
+		console.log(target.tagName);
+		target = target.parentElement;
+	}
+
+	console.log("end", target.tagName);
 }
 
 function addMudShrink(element) {

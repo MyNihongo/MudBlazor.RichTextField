@@ -46,6 +46,8 @@ public partial class MudRichTextField : IAsyncDisposable
 	[Parameter]
 	public EventCallback<string> ValueChanged { get; set; }
 
+	internal MudRichTextToolbar? Toolbar { get; set; }
+
 	private string VariantString => Variant.ToString().ToLower();
 
 	private bool HasToolbar => HasBold || HasItalic;
