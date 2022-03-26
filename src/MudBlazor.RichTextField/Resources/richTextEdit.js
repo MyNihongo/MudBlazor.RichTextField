@@ -64,8 +64,8 @@ MudBlazorRichTextEdit.applyFormatting = (elementId, formatType) => {
 	}
 
 	const range = document.createRange();
-	range.setStart(selection.endContainer, selection.endSelection);
-	range.collapse(true);
+	range.setStart(selection.startContainer, selection.startSelection);
+	range.setEnd(selection.endContainer, selection.endSelection);
 
 	const windowSelection = window.getSelection();
 	windowSelection.removeAllRanges();
