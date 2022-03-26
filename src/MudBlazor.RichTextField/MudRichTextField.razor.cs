@@ -29,6 +29,9 @@ public partial class MudRichTextField : IAsyncDisposable
 	public bool HasItalic { get; set; } = true;
 
 	[Parameter]
+	public bool HasUnderline { get; set; } = true;
+
+	[Parameter]
 	public string Value
 	{
 		get => _value;
@@ -50,7 +53,7 @@ public partial class MudRichTextField : IAsyncDisposable
 
 	private string VariantString => Variant.ToString().ToLower();
 
-	private bool HasToolbar => HasBold || HasItalic;
+	private bool HasToolbar => HasBold || HasItalic || HasUnderline;
 
 	private string InputContainerClasses => new CssBuilder("mud-input")
 		.AddClass($"mud-input-{VariantString}")

@@ -19,6 +19,8 @@ public sealed partial class MudRichTextToolbar : ComponentBase
 
 	private bool IsItalicActive { get; set; }
 
+	private bool IsUnderlineActive { get; set; }
+
 	internal async Task SetOptionsAsync(ToolbarOptions options)
 	{
 		var stateHasChanged = false;
@@ -32,6 +34,12 @@ public sealed partial class MudRichTextToolbar : ComponentBase
 		if (options.IsItalicActive != IsItalicActive)
 		{
 			IsItalicActive = options.IsItalicActive;
+			stateHasChanged = true;
+		}
+
+		if (options.IsUnderlineActive != IsUnderlineActive)
+		{
+			IsUnderlineActive = options.IsUnderlineActive;
 			stateHasChanged = true;
 		}
 

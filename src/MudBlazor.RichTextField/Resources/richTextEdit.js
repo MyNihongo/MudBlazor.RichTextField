@@ -100,22 +100,20 @@ async function setFormatSelectionAsync(target, dotNetInvokable) {
 		return;
 	}
 
-	let isBoldActive = false, isItalicActive = false;
+	let isBoldActive = false, isItalicActive = false, isUnderlineActive = false;
 
 	// RichText root always has the ID
 	while (target.parentElement && !target.parentElement.id) {
-		if (target.tagName === "B") {
-			isBoldActive = true;
-
-			if (isItalicActive) {
+		switch (target.tagName) {
+			case "B":
+				isBoldActive = true;
 				break;
-			}
-		} else if (target.tagName === "I") {
-			isItalicActive = true;
-
-			if (isBoldActive) {
+			case "I":
+				isItalicActive = true;
 				break;
-			}
+			case "U":
+				isUnderlineActive = true;
+				break;
 		}
 
 		target = target.parentElement;
@@ -123,7 +121,8 @@ async function setFormatSelectionAsync(target, dotNetInvokable) {
 
 	const toolbarOptions = {
 		isBoldActive: isBoldActive,
-		isItalicActive: isItalicActive
+		isItalicActive: isItalicActive,
+		isUnderlineActive: isUnderlineActive
 	};
 
 	await dotNetInvokable.invokeMethodAsync("SetToolbarOptions", toolbarOptions);

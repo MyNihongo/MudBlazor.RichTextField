@@ -14,4 +14,12 @@
 		                     ToggledColor="@Color.Primary"
 		                     @bind-Toggled="IsItalicActive"/>
 	}
+	
+	@if (TextField.HasUnderline)
+	{
+		<MudToggleIconButton Icon="@Icons.Material.Rounded.FormatUnderlined"
+		                     ToggledIcon="@Icons.Material.Rounded.FormatUnderlined"
+		                     ToggledColor="@Color.Primary"
+		                     @bind-Toggled="IsUnderlineActive"/>
+	}
 </MudToolBar>
