@@ -4,7 +4,7 @@
 // Would be nice to have it implemented
 public partial class MudRichTextField : IAsyncDisposable
 {
-	private readonly string _id = Guid.NewGuid().ToString();
+	internal readonly string Id = Guid.NewGuid().ToString();
 	private readonly DotNetObjectReference<InnerHtmlChangedInvokable> _innerHtmlChangedInvokable;
 
 	private string _value = string.Empty;
@@ -95,7 +95,7 @@ public partial class MudRichTextField : IAsyncDisposable
 				.ConfigureAwait(false);
 		}
 
-		await _jsRuntime.InitAsync(_id, _innerHtmlChangedInvokable)
+		await _jsRuntime.InitAsync(Id, _innerHtmlChangedInvokable)
 			.ConfigureAwait(false);
 	}
 
@@ -104,7 +104,7 @@ public partial class MudRichTextField : IAsyncDisposable
 		GC.SuppressFinalize(this);
 
 		_innerHtmlChangedInvokable.Dispose();
-		return _jsRuntime.UnloadAsync(_id);
+		return _jsRuntime.UnloadAsync(Id);
 	}
 
 	internal async Task SetValueFromInnerHtmlAsync(string innerHtml)
@@ -136,7 +136,7 @@ public partial class MudRichTextField : IAsyncDisposable
 			_isInternalSet = true;
 			value = value.ToInnerHtml();
 
-			await _jsRuntime.SetInnerHtmlAsync(_id, value)
+			await _jsRuntime.SetInnerHtmlAsync(Id, value)
 				.ConfigureAwait(false);
 		}
 		finally
