@@ -23,5 +23,5 @@ internal static class JsRuntimeEx
 		@this.ApplyFormattingAsync(elementId, "U", isActive);
 
 	private static ValueTask<bool> ApplyFormattingAsync(this IJSRuntime @this, string elementId, string formatChar, bool isActive) =>
-		@this.InvokeAsync<bool>($"{Prefix}.applyFormatting", elementId, formatChar);
+		@this.InvokeAsync<bool>($"{Prefix}.applyFormatting", elementId, formatChar, isActive);
 }
