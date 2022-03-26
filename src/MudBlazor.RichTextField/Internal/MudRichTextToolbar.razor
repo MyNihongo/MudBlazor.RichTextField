@@ -33,25 +33,19 @@
 {
 	private async Task OnBoldChangedAsync(bool isActive)
 	{
-		IsBoldActive = isActive;
-
-		await _jsRuntime.ApplyBoldFormattingAsync(TextField.Id)
+		IsBoldActive = await _jsRuntime.ApplyBoldFormattingAsync(TextField.Id, isActive)
 			.ConfigureAwait(false);
 	}
 
 	private async Task OnItalicChangedAsync(bool isActive)
 	{
-		IsItalicActive = isActive;
-
-		await _jsRuntime.ApplyItalicFormattingAsync(TextField.Id)
+		IsItalicActive = await _jsRuntime.ApplyItalicFormattingAsync(TextField.Id, isActive)
 			.ConfigureAwait(false);
 	}
 
 	private async Task OnUnderlineChangedAsync(bool isActive)
 	{
-		IsUnderlineActive = isActive;
-
-		await _jsRuntime.ApplyUnderlineFormattingAsync(TextField.Id)
+		IsUnderlineActive = await _jsRuntime.ApplyUnderlineFormattingAsync(TextField.Id, isActive)
 			.ConfigureAwait(false);
 	}
 }

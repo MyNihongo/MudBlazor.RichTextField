@@ -13,15 +13,15 @@ internal static class JsRuntimeEx
 	public static ValueTask UnloadAsync(this IJSRuntime @this, string elementId) =>
 		@this.InvokeVoidAsync($"{Prefix}.dispose", elementId);
 
-	public static ValueTask ApplyBoldFormattingAsync(this IJSRuntime @this, string elementId) =>
-		@this.ApplyFormattingAsync(elementId, "B");
+	public static ValueTask<bool> ApplyBoldFormattingAsync(this IJSRuntime @this, string elementId, bool isActive) =>
+		@this.ApplyFormattingAsync(elementId, "B", isActive);
 
-	public static ValueTask ApplyItalicFormattingAsync(this IJSRuntime @this, string elementId) =>
-		@this.ApplyFormattingAsync(elementId, "I");
+	public static ValueTask<bool> ApplyItalicFormattingAsync(this IJSRuntime @this, string elementId, bool isActive) =>
+		@this.ApplyFormattingAsync(elementId, "I", isActive);
 
-	public static ValueTask ApplyUnderlineFormattingAsync(this IJSRuntime @this, string elementId) =>
-		@this.ApplyFormattingAsync(elementId, "U");
+	public static ValueTask<bool> ApplyUnderlineFormattingAsync(this IJSRuntime @this, string elementId, bool isActive) =>
+		@this.ApplyFormattingAsync(elementId, "U", isActive);
 
-	private static ValueTask ApplyFormattingAsync(this IJSRuntime @this, string elementId, string formatChar) =>
-		@this.InvokeVoidAsync($"{Prefix}.applyFormatting", elementId, formatChar);
+	private static ValueTask<bool> ApplyFormattingAsync(this IJSRuntime @this, string elementId, string formatChar, bool isActive) =>
+		@this.InvokeAsync<bool>($"{Prefix}.applyFormatting", elementId, formatChar);
 }
