@@ -1,6 +1,7 @@
 MudBlazorRichTextEdit = {
 	observers: {},
-	selections: {}
+	selections: {},
+	elementCandidates: {}
 };
 
 const mudShrink = "mud-shrink";
@@ -26,8 +27,8 @@ MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 		await setFormatSelectionAsync(selectionTarget, dotNetInvokable);
 	};
 
-	const onKeyUp = async function () {
-		const selectionTarget = setCurrentSelection(elementId);
+	const onKeyUp = async function (e) {
+		const selectionTarget = setCurrentSelection(elementId, e.keyCode);
 		await setFormatSelectionAsync(selectionTarget, dotNetInvokable);
 	};
 
@@ -71,8 +72,13 @@ MudBlazorRichTextEdit.applyFormatting = (elementId, formatType, isActive) => {
 	windowSelection.removeAllRanges();
 	windowSelection.addRange(range);
 
-	if (selection.startContainer === selection.endContainer && selection.startOffset === selection.endOffset) {
-		
+	if (isSelectionEmpty(selection)) {
+		MudBlazorRichTextEdit.elementCandidates[elementId] = {
+			startContainer: selection.startContainer,
+			startOffset: selection.startOffset,
+			formatType: formatType,
+			isActive: isActive
+		};
 	} else {
 		
 	}
@@ -88,14 +94,17 @@ MudBlazorRichTextEdit.dispose = (elementId) => {
 	}
 }
 
-function setCurrentSelection(elementId) {
+function setCurrentSelection(elementId, keyCode) {
 	const selection = window.getSelection();
 	if (selection.rangeCount === 0) {
 		return undefined;
 	}
 
 	const range = selection.getRangeAt(0);
+	applyElementCandidate(elementId, range, keyCode);
+
 	const prevSelection = MudBlazorRichTextEdit.selections[elementId];
+	const currentElement = getSelectionElement(range.startContainer);
 
 	MudBlazorRichTextEdit.selections[elementId] = {
 		startContainer: range.startContainer,
@@ -103,8 +112,6 @@ function setCurrentSelection(elementId) {
 		endContainer: range.endContainer,
 		endOffset: range.endOffset
 	};
-
-	const currentElement = getSelectionElement(range.startContainer);
 
 	if (prevSelection) {
 		const prevElement = getSelectionElement(prevSelection);
@@ -116,6 +123,25 @@ function setCurrentSelection(elementId) {
 	} else {
 		return currentElement;
 	}
+}
+
+function applyElementCandidate(elementId, selection, keyCode) {
+	if (keyCode && isSelectionEmpty(selection)) {
+		const candidate = MudBlazorRichTextEdit.elementCandidates[elementId];
+		if (candidate && candidate.startContainer === selection.startContainer) {
+			// Keys like `shift`, `control`, etc., so we do not want to reset the element
+			if (candidate.startOffset === selection.startOffset) {
+				return;
+			}
+
+			// Make sure that the position is not moved by arrow keys
+			if (candidate.startOffset === selection.startOffset - 1 && (keyCode < 37 || keyCode > 40)) {
+				console.log("ok");
+			}
+		}
+	}
+
+	delete MudBlazorRichTextEdit.elementCandidates[elementId];
 }
 
 async function setFormatSelectionAsync(target, dotNetInvokable) {
@@ -171,4 +197,8 @@ function getSelectionElement(container) {
 	return container instanceof Element
 		? container
 		: container.parentElement;
+}
+
+function isSelectionEmpty(selection) {
+	return selection.startContainer === selection.endContainer && selection.startOffset === selection.endOffset;
 }
