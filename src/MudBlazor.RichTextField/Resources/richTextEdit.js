@@ -67,10 +67,7 @@ MudBlazorRichTextEdit.applyFormatting = (elementId, tagName, isActive) => {
 	const range = document.createRange();
 	range.setStart(selection.startContainer, selection.startOffset);
 	range.setEnd(selection.endContainer, selection.endOffset);
-
-	const windowSelection = window.getSelection();
-	windowSelection.removeAllRanges();
-	windowSelection.addRange(range);
+	setWindowSelectionRange(range);
 
 	if (isSelectionEmpty(selection)) {
 		MudBlazorRichTextEdit.elementCandidates[elementId] = {
@@ -138,12 +135,18 @@ function applyElementCandidate(elementId, selection, keyCode) {
 			const endOffset = 1;
 			if (candidate.startOffset === selection.startOffset - endOffset && (keyCode < 37 || keyCode > 40)) {
 				const element = getSelectionElement(selection.startContainer);
+				let newElement;
 				if (isChildOf(element, candidate.tagName)) {
-
+					return;
 				} else {
 					const startIndex = getSelectionIndex(element, candidate);
-					insertNewElement(element, candidate.tagName, startIndex, endOffset);
+					newElement = insertNewElement(element, candidate.tagName, startIndex, endOffset);
 				}
+
+				const range = document.createRange();
+				range.setStart(newElement, endOffset);
+				range.collapse(true);
+				setWindowSelectionRange(range);
 			}
 		}
 	}
@@ -184,51 +187,6 @@ async function setFormatSelectionAsync(target, dotNetInvokable) {
 	await dotNetInvokable.invokeMethodAsync("SetToolbarOptions", toolbarOptions);
 }
 
-function getSelectionIndex(parentElement, candidate) {
-	if (parentElement === candidate.startContainer) {
-		return candidate.startOffset;
-	}
-
-	let index = 0;
-	for (let i = 0; i < parentElement.childNodes.length; i++) {
-		if (parentElement.childNodes[i] === candidate.startContainer) {
-			return index + candidate.startOffset;
-		}
-
-		if (parentElement.childNodes[i] instanceof Element) {
-			index += parentElement.childNodes[i].outerHTML.length;
-		} else {
-			index += parentElement.childNodes[i].textContent.length;
-		}
-	}
-
-	return index;
-}
-
-function insertNewElement(element, tagName, startIndex, endOffset) {
-	const innerHtml =
-		element.innerHTML.substring(0, startIndex) +
-		`<${tagName.toLowerCase()}>` +
-		element.innerHTML.substring(startIndex, startIndex + endOffset) +
-		`</${tagName.toLowerCase()}>`
-		+ element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
-
-	element.innerHTML = innerHtml;
-}
-
-function isChildOf(element, elementTag) {
-	// RichText root always has the ID
-	while (element.parentElement && !element.parentElement.id) {
-		if (element.tagName === elementTag) {
-			return true;
-		}
-
-		element = element.parentElement;
-	}
-
-	return false;
-}
-
 function addMudShrink(element) {
 	if (!element || element.classList.contains(mudShrink)) {
 		return;
@@ -245,10 +203,80 @@ function removeMudShrink(element) {
 	element.classList.remove(mudShrink);
 }
 
+function insertNewElement(element, tagName, startIndex, endOffset) {
+	const innerHtml =
+		element.innerHTML.substring(0, startIndex) +
+			`<${tagName.toLowerCase()}>` +
+			element.innerHTML.substring(startIndex, startIndex + endOffset) +
+			`</${tagName.toLowerCase()}>`
+			+ element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
+
+	element.innerHTML = innerHtml;
+	return getNodeAt(element, startIndex + endOffset);
+}
+
+function isChildOf(element, elementTag) {
+	// RichText root always has the ID
+	while (element.parentElement && !element.parentElement.id) {
+		if (element.tagName === elementTag) {
+			return true;
+		}
+
+		element = element.parentElement;
+	}
+
+	return false;
+}
+
+function getSelectionIndex(parentElement, candidate) {
+	if (parentElement === candidate.startContainer) {
+		return candidate.startOffset;
+	}
+
+	let index = 0;
+	for (let i = 0; i < parentElement.childNodes.length; i++) {
+		if (parentElement.childNodes[i] === candidate.startContainer) {
+			return index + candidate.startOffset;
+		}
+
+		index += getNodeLength(parentElement.childNodes[i]);
+	}
+
+	return index;
+}
+
+function getNodeAt(parentElement, index) {
+	let currentIndex = 0;
+	for (let i = 0; i < parentElement.childNodes.length; i++) {
+		const nodeLength = getNodeLength(parentElement.childNodes[i]);
+		if (index >= currentIndex && index < currentIndex + nodeLength) {
+			return parentElement.childNodes[i];
+		}
+
+		currentIndex += nodeLength;
+	}
+
+	return undefined;
+}
+
+function getNodeLength(node) {
+	if (node instanceof Element) {
+		return node.outerHTML.length;
+	} else {
+		return node.textContent.length;
+	}
+}
+
 function getSelectionElement(container) {
 	return container instanceof Element
 		? container
 		: container.parentElement;
+}
+
+function setWindowSelectionRange(range) {
+	const windowSelection = window.getSelection();
+	windowSelection.removeAllRanges();
+	windowSelection.addRange(range);
 }
 
 function isSelectionEmpty(selection) {
