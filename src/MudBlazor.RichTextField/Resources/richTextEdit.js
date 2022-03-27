@@ -64,14 +64,14 @@ MudBlazorRichTextEdit.applyFormatting = (elementId, formatType, isActive) => {
 	}
 
 	const range = document.createRange();
-	range.setStart(selection.startContainer, selection.startSelection);
-	range.setEnd(selection.endContainer, selection.endSelection);
+	range.setStart(selection.startContainer, selection.startOffset);
+	range.setEnd(selection.endContainer, selection.endOffset);
 
 	const windowSelection = window.getSelection();
 	windowSelection.removeAllRanges();
 	windowSelection.addRange(range);
 
-	if (selection.startContainer === selection.endContainer && selection.startSelection === selection.endSelection) {
+	if (selection.startContainer === selection.endContainer && selection.startOffset === selection.endOffset) {
 		
 	} else {
 		
@@ -99,9 +99,9 @@ function setCurrentSelection(elementId) {
 
 	MudBlazorRichTextEdit.selections[elementId] = {
 		startContainer: range.startContainer,
-		startSelection: range.startOffset,
+		startOffset: range.startOffset,
 		endContainer: range.endContainer,
-		endSelection: range.endOffset
+		endOffset: range.endOffset
 	};
 
 	const currentElement = getSelectionElement(range.startContainer);
