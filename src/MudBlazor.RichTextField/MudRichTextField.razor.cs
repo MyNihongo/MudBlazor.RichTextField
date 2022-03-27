@@ -89,11 +89,8 @@ public partial class MudRichTextField : IAsyncDisposable
 
 		_hasBeenRendered = true;
 
-		if (!string.IsNullOrEmpty(_value))
-		{
-			await SetInnerHtmlFromValueAsync(_value)
-				.ConfigureAwait(false);
-		}
+		await SetInnerHtmlFromValueAsync(_value)
+			.ConfigureAwait(false);
 
 		await _jsRuntime.InitAsync(Id, _innerHtmlChangedInvokable)
 			.ConfigureAwait(false);
