@@ -1,5 +1,6 @@
 ﻿.mud-input-root-richtext {
     height: auto !important;
+    white-space: pre-wrap !important;
 }
 
 .mud-input-root-richtext-toolbar {
