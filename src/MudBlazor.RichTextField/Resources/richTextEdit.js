@@ -238,11 +238,7 @@ function splitElement(element, tagName, startIndex, endOffset) {
 }
 
 function isNotNullOrWhitespace(str) {
-	if (str) {
-		return str.match(/^\s*$/) === null;
-	} else {
-		return false;
-	}
+	return str && str.match(/^\s*$/) === null;
 }
 
 function isSelectionEmpty(selection) {
