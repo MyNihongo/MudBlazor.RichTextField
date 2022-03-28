@@ -13,7 +13,7 @@ MudBlazorRichTextEdit.init = (elementId, dotNetInvokable) => {
 	}
 
 	const onInnerHtmlChanged = async function () {
-		if (target.innerHTML && target.innerHTML !== "<br>") {
+		if (isNotNullOrWhitespace(target.innerText)) {
 			addMudShrink(target.parentElement);
 		} else {
 			removeMudShrink(target.parentElement);
@@ -237,6 +237,18 @@ function splitElement(element, tagName, startIndex, endOffset) {
 	}
 }
 
+function isNotNullOrWhitespace(str) {
+	if (str) {
+		return str.match(/^\s*$/) === null;
+	} else {
+		return false;
+	}
+}
+
+function isSelectionEmpty(selection) {
+	return selection.startContainer === selection.endContainer && selection.startOffset === selection.endOffset;
+}
+
 function isChildOf(element, elementTag) {
 	// RichText root always has the ID
 	while (element.parentElement && !element.parentElement.id) {
@@ -299,8 +311,4 @@ function setWindowSelectionRange(range) {
 	const windowSelection = window.getSelection();
 	windowSelection.removeAllRanges();
 	windowSelection.addRange(range);
-}
-
-function isSelectionEmpty(selection) {
-	return selection.startContainer === selection.endContainer && selection.startOffset === selection.endOffset;
 }
