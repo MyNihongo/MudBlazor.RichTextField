@@ -135,11 +135,18 @@ function applyElementCandidate(elementId, selection, keyCode) {
 			const endOffset = 1;
 			if (candidate.startOffset === selection.startOffset - endOffset && (keyCode < 37 || keyCode > 40)) {
 				const element = getSelectionElement(selection.startContainer);
+				const startIndex = getSelectionIndex(element, candidate);
+
 				let newElement;
 				if (isChildOf(element, candidate.tagName)) {
-					return;
+					const nodeLength = getNodeLength(selection.startContainer);
+					if (selection.startOffset === nodeLength) {
+						return;
+					} else {
+						newElement = splitElement(element, candidate.tagName, startIndex, endOffset);
+						return;
+					}
 				} else {
-					const startIndex = getSelectionIndex(element, candidate);
 					newElement = insertNewElement(element, candidate.tagName, startIndex, endOffset);
 				}
 
@@ -206,13 +213,28 @@ function removeMudShrink(element) {
 function insertNewElement(element, tagName, startIndex, endOffset) {
 	const innerHtml =
 		element.innerHTML.substring(0, startIndex) +
-			`<${tagName.toLowerCase()}>` +
-			element.innerHTML.substring(startIndex, startIndex + endOffset) +
-			`</${tagName.toLowerCase()}>`
-			+ element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
+		`<${tagName}>` +
+		element.innerHTML.substring(startIndex, startIndex + endOffset) +
+		`</${tagName}>` +
+		element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
 
 	element.innerHTML = innerHtml;
 	return getNodeAt(element, startIndex + endOffset);
+}
+
+function splitElement(element, tagName, startIndex, endOffset) {
+	const innerHtml =
+		element.innerHTML.substring(0, startIndex) +
+		`</${tagName}>` +
+		element.innerHTML.substring(startIndex, startIndex + endOffset) +
+		`<${tagName}>` +
+		element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
+
+	if (element.tagName === tagName) {
+		element.outerHTML = `<${tagName}>${innerHtml}</${tagName}>`;
+	} else {
+		element.innerHTML = innerHtml;
+	}
 }
 
 function isChildOf(element, elementTag) {
