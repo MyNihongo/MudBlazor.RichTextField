@@ -144,7 +144,6 @@ function applyElementCandidate(elementId, selection, keyCode) {
 						return;
 					} else {
 						newElement = splitElement(element, candidate.tagName, startIndex, endOffset);
-						return;
 					}
 				} else {
 					newElement = insertNewElement(element, candidate.tagName, startIndex, endOffset);
@@ -240,8 +239,7 @@ function splitElement(element, tagName, startIndex, endOffset) {
 	}
 
 	const outerHtmlOffset = tagName.length * 2 + 5;
-	const node = getNodeAt(parent, elementIndex + outerHtmlOffset);
-	console.log(node);
+	return getNodeAt(parent, elementIndex + outerHtmlOffset);
 }
 
 function isNotNullOrWhitespace(str) {
