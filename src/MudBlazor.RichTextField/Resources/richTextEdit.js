@@ -138,12 +138,13 @@ function applyElementCandidate(elementId, selection, keyCode) {
 				const startIndex = getSelectionIndex(element, candidate);
 
 				let newElement;
-				if (isChildOf(element, candidate.tagName)) {
+				const parentWithTag = tryGetParentTag(element, candidate.tagName);
+				if (parentWithTag) {
 					const nodeLength = getNodeLength(selection.startContainer);
 					if (selection.startOffset === nodeLength) {
 						return;
 					} else {
-						newElement = splitElement(element, candidate.tagName, startIndex, endOffset);
+						newElement = splitElement(element, parentWithTag, startIndex, endOffset);
 					}
 				} else {
 					newElement = insertNewElement(element, candidate.tagName, startIndex, endOffset);
@@ -221,24 +222,25 @@ function insertNewElement(element, tagName, startIndex, endOffset) {
 	return getNodeAt(element, startIndex + endOffset);
 }
 
-function splitElement(element, tagName, startIndex, endOffset) {
+function splitElement(element, parentWithTag, startIndex, endOffset) {
 	const innerHtml =
 		element.innerHTML.substring(0, startIndex) +
-		`</${tagName}>` +
+		`</${parentWithTag.tagName}>` +
 		element.innerHTML.substring(startIndex, startIndex + endOffset) +
-		`<${tagName}>` +
+		`<${parentWithTag.tagName}>` +
 		element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
 
 	const parent = element.parentElement;
 	const elementIndex = getSelectionIndex(parent, { startContainer: element, startOffset: startIndex });
 
-	if (element.tagName === tagName) {
-		element.outerHTML = `<${tagName}>${innerHtml}</${tagName}>`;
+	if (element.tagName === parentWithTag.tagName) {
+		element.outerHTML = `<${parentWithTag.tagName}>${innerHtml}</${parentWithTag.tagName}>`;
 	} else {
-		element.innerHTML = innerHtml;
+		// here we need to inline the parent component like this
+		parentWithTag.outerHTML = "<i>test1 </i><b>test2</b><i> test3</i>";
 	}
 
-	const outerHtmlOffset = tagName.length * 2 + 5;
+	const outerHtmlOffset = parentWithTag.tagName.length * 2 + 5;
 	return getNodeAt(parent, elementIndex + outerHtmlOffset);
 }
 
@@ -250,17 +252,17 @@ function isSelectionEmpty(selection) {
 	return selection.startContainer === selection.endContainer && selection.startOffset === selection.endOffset;
 }
 
-function isChildOf(element, elementTag) {
+function tryGetParentTag(element, elementTag) {
 	// RichText root always has the ID
 	while (element.parentElement && !element.parentElement.id) {
 		if (element.tagName === elementTag) {
-			return true;
+			return element;
 		}
 
 		element = element.parentElement;
 	}
 
-	return false;
+	return undefined;
 }
 
 function getSelectionIndex(parentElement, candidate) {
