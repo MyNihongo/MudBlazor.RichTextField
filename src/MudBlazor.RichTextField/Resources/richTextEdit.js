@@ -230,11 +230,18 @@ function splitElement(element, tagName, startIndex, endOffset) {
 		`<${tagName}>` +
 		element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
 
+	const parent = element.parentElement;
+	const elementIndex = getSelectionIndex(parent, { startContainer: element, startOffset: startIndex });
+
 	if (element.tagName === tagName) {
 		element.outerHTML = `<${tagName}>${innerHtml}</${tagName}>`;
 	} else {
 		element.innerHTML = innerHtml;
 	}
+
+	const outerHtmlOffset = tagName.length * 2 + 5;
+	const node = getNodeAt(parent, elementIndex + outerHtmlOffset);
+	console.log(node);
 }
 
 function isNotNullOrWhitespace(str) {
