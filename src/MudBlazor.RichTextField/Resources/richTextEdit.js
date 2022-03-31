@@ -141,7 +141,9 @@ function applyElementCandidate(elementId, selection, keyCode) {
 				const parentWithTag = tryGetParentTag(element, candidate.tagName);
 				if (parentWithTag) {
 					const nodeLength = getNodeLength(selection.startContainer);
-					if (selection.startOffset === nodeLength) {
+					if (selection.startOffset === 0) {
+						return;
+					} else if (selection.startOffset === nodeLength) {
 						return;
 					} else {
 						newElement = splitElement(element, parentWithTag, startIndex, endOffset);
@@ -230,18 +232,27 @@ function splitElement(element, parentWithTag, startIndex, endOffset) {
 		`<${parentWithTag.tagName}>` +
 		element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
 
-	const parent = element.parentElement;
-	const elementIndex = getSelectionIndex(parent, { startContainer: element, startOffset: startIndex });
-
 	if (element.tagName === parentWithTag.tagName) {
-		element.outerHTML = `<${parentWithTag.tagName}>${innerHtml}</${parentWithTag.tagName}>`;
-	} else {
-		// here we need to inline the parent component like this
-		parentWithTag.outerHTML = "<i>test1 </i><b>test2</b><i> test3</i>";
-	}
+		const parent = element.parentElement;
+		const elementIndex = getSelectionIndex(parent, { startContainer: element, startOffset: startIndex });
 
-	const outerHtmlOffset = parentWithTag.tagName.length * 2 + 5;
-	return getNodeAt(parent, elementIndex + outerHtmlOffset);
+		element.outerHTML = `<${parentWithTag.tagName}>${innerHtml}</${parentWithTag.tagName}>`;
+
+		const outerHtmlOffset = parentWithTag.tagName.length * 2 + 5;
+		return getNodeAt(parent, elementIndex + outerHtmlOffset);
+	} else {
+		// Since the outerHTML tags are not included, add their length
+		const elementIndex = getSelectionIndex(parentWithTag, { startContainer: element, startOffset: 0 }) + parentWithTag.tagName.length + 2;
+
+		const outerHtml =
+			parentWithTag.outerHTML.substring(0, elementIndex) +
+			`</${parentWithTag.tagName}><${element.tagName}><${parentWithTag.tagName}>` +
+			innerHtml +
+			`</${parentWithTag.tagName}></${element.tagName}><${parentWithTag.tagName}>` +
+			parentWithTag.outerHTML.substring(elementIndex + element.outerHTML.length, parentWithTag.outerHTML.length);
+
+		parentWithTag.outerHTML = outerHtml;
+	}
 }
 
 function isNotNullOrWhitespace(str) {
