@@ -238,9 +238,12 @@ function splitElement(element, parentWithTag, startIndex, endOffset) {
 
 		element.outerHTML = `<${parentWithTag.tagName}>${innerHtml}</${parentWithTag.tagName}>`;
 
-		const outerHtmlOffset = parentWithTag.tagName.length * 2 + 5;
+		const outerHtmlOffset = parentWithTag.tagName.length * 2 + 5; // 5 for `<>` + `</>`
 		return getNodeAt(parent, elementIndex + outerHtmlOffset);
 	} else {
+		const superParent = parentWithTag.parentElement;
+		const parentWithTagIndex = getSelectionIndex(superParent, { startContainer: parentWithTag, startOffset: 0 });
+
 		// Since the outerHTML tags are not included, add their length
 		const elementIndex = getSelectionIndex(parentWithTag, { startContainer: element, startOffset: 0 }) + parentWithTag.tagName.length + 2;
 
@@ -252,6 +255,12 @@ function splitElement(element, parentWithTag, startIndex, endOffset) {
 			parentWithTag.outerHTML.substring(elementIndex + element.outerHTML.length, parentWithTag.outerHTML.length);
 
 		parentWithTag.outerHTML = outerHtml;
+
+		const newElementOffset = parentWithTag.tagName.length + 3; // 3 for `</>` (closing tag before the parent)
+		const newElement = getNodeAt(superParent, parentWithTagIndex + elementIndex + newElementOffset);
+
+		const newNodeOffset = parentWithTag.tagName.length * 2 + 5; // 5 for `<>` + `</>`
+		return getNodeAt(newElement, startIndex + newNodeOffset);
 	}
 }
 
