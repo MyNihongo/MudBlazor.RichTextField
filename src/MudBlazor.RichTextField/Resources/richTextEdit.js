@@ -74,7 +74,7 @@ MudBlazorRichTextEdit.applyFormatting = (elementId, tagName, isActive) => {
 			startContainer: selection.startContainer,
 			startOffset: selection.startOffset,
 			tagName: tagName,
-			isActive: isActive
+			isActive: isActive // TODO: is it needed? it is determined by analyzing the nodes
 		};
 	} else {
 		
