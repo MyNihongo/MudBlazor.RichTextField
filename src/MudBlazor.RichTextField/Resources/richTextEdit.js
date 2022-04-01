@@ -263,6 +263,8 @@ function splitElement(element, parentWithTag, startIndex, endOffset) {
 		const outerHtmlOffset = parentWithTag.tagName.length * 2 + 5; // 5 for `<>` + `</>`
 		return getNodeAt(parent, elementIndex + outerHtmlOffset);
 	} else {
+		throw Error("does not work with nested (3+ levels due to the iteration)");
+
 		const superParent = parentWithTag.parentElement;
 		const parentWithTagIndex = getSelectionIndex(superParent, { startContainer: parentWithTag, startOffset: 0 });
 
