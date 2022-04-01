@@ -14,4 +14,10 @@ internal sealed class InnerHtmlChangedInvokable
 	{
 		return _richTextField.SetValueFromInnerHtmlAsync(innerHtml);
 	}
+
+	[JSInvokable("SetToolbarOptions")]
+	public Task SetToolbarOptionsAsync(ToolbarOptions options)
+	{
+		return _richTextField.Toolbar?.SetOptionsAsync(options) ?? Task.CompletedTask;
+	}
 }

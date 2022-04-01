@@ -3,9 +3,24 @@
 <PageTitle>Index</PageTitle>
 <MudText Typo="Typo.h2">Hello, 世界</MudText>
 
-<MudRichTextField @bind-Value="RichTextValue" Label="Test" Variant="Variant.Filled" />
+<MudRichTextField
+	Label="Empty"
+	Variant="Variant.Filled"
+	@bind-Value="EmptyValue"/>
+
+<MudRichTextField
+	Label="With value"
+	Variant="Variant.Outlined"
+	@bind-Value="RichTextValue" />
 
 @code
 {
-	public string RichTextValue { get; set; } = "leatherman" + Environment.NewLine + "<i>do you like what you see?</i>" + Environment.NewLine + Environment.NewLine + "<b>that turns me on</b>";
+	public string EmptyValue { get; set; } = string.Empty;
+
+	public string RichTextValue { get; set; } =
+		"leather<u>man</u>" + Environment.NewLine + 
+		"<i>do you like</i> what you see? <i>do you like <b>what</b> you see?</i>" + Environment.NewLine +
+		Environment.NewLine +
+		"<b>that <i>turns</i> me on</b>" + Environment.NewLine +
+		"some text <b>bold <i>italic <u>underline underline</u> italic</i> bold</b>";
 }

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{715D9363-8E7D-4D26-98AA-9D10F13E180F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBlazor.RichTextField.Sample.Core", "MudBlazor.RichTextField.Sample.Core\MudBlazor.RichTextField.Sample.Core.csproj", "{21A3857F-6821-4159-A552-B39E56CC27B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazor.RichTextField.Sample.Core", "MudBlazor.RichTextField.Sample.Core\MudBlazor.RichTextField.Sample.Core.csproj", "{21A3857F-6821-4159-A552-B39E56CC27B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

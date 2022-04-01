@@ -1,3 +1,38 @@
-﻿.mud-richtextinput-root {
+﻿.mud-input-root-richtext {
     height: auto !important;
+    white-space: pre-wrap !important;
+}
+
+.mud-input-root-richtext-toolbar {
+    margin-top: 52px !important;
+}
+
+.mud-input-label-richtext {
+    margin-top: 52px;
+}
+
+.mud-toolbar-richtext {
+    position: absolute;
+    top: 0;
+    padding: 0 12px 0;
+}
+
+@media (min-width: 0) and (orientation: landscape) {
+    .mud-input-root-richtext-toolbar {
+        margin-top: 44px !important;
+    }
+
+    .mud-input-label-richtext {
+        margin-top: 44px;
+    }
+}
+
+@media (min-width: 600px) {
+    .mud-input-root-richtext-toolbar {
+        margin-top: 60px !important;
+    }
+
+    .mud-input-label-richtext {
+        margin-top: 60px;
+    }
 }

@@ -5,7 +5,7 @@ namespace MudBlazor;
 
 internal static class StringEx
 {
-	private const string Heading = "<div>", Trailing = "</div>", Break = "<br>";
+	private const string Heading = "<p>", Trailing = "</p>", Break = "<br>";
 
 	private static readonly ObjectPool<StringBuilder> StringBuilderPool = new DefaultObjectPoolProvider()
 		.CreateStringBuilderPool();
@@ -57,7 +57,7 @@ internal static class StringEx
 	public static string ToInnerHtml(this string? @this)
 	{
 		if (string.IsNullOrEmpty(@this))
-			return Break;
+			return Heading + Break + Trailing;
 
 		var builder = StringBuilderPool.Get()
 			.Append(Heading);

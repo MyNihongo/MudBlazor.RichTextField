@@ -7,7 +7,7 @@ public sealed class ToInnerHtmlShould
 	[InlineData("")]
 	public void BeEmptyLineIfEmpty(string? input)
 	{
-		const string expected = "<br>";
+		const string expected = "<p><br></p>";
 
 		var result = input.ToInnerHtml();
 
@@ -20,7 +20,7 @@ public sealed class ToInnerHtmlShould
 	public void ConvertSingleLine()
 	{
 		const string input = nameof(input),
-			expected = $"<div>{input}</div>";
+			expected = $"<p>{input}</p>";
 
 		var result = input.ToInnerHtml();
 
@@ -33,7 +33,7 @@ public sealed class ToInnerHtmlShould
 	public void ConvertTwoLines()
 	{
 		var input = "line1" + Environment.NewLine + "line2";
-		const string expected = "<div>line1</div><div>line2</div>";
+		const string expected = "<p>line1</p><p>line2</p>";
 
 		var result = input.ToInnerHtml();
 
@@ -46,7 +46,7 @@ public sealed class ToInnerHtmlShould
 	public void ConvertThreeLines()
 	{
 		var input = "line1" + Environment.NewLine + "line2" + Environment.NewLine + "line3";
-		const string expected = "<div>line1</div><div>line2</div><div>line3</div>";
+		const string expected = "<p>line1</p><p>line2</p><p>line3</p>";
 
 		var result = input.ToInnerHtml();
 
@@ -59,7 +59,7 @@ public sealed class ToInnerHtmlShould
 	public void ConvertFirstEmpty()
 	{
 		var input = Environment.NewLine + "line2" + Environment.NewLine + "line3";
-		const string expected = "<div><br></div><div>line2</div><div>line3</div>";
+		const string expected = "<p><br></p><p>line2</p><p>line3</p>";
 
 		var result = input.ToInnerHtml();
 
@@ -72,7 +72,7 @@ public sealed class ToInnerHtmlShould
 	public void ConvertSecondEmpty()
 	{
 		var input = "line1" + Environment.NewLine + Environment.NewLine + "line3";
-		const string expected = "<div>line1</div><div><br></div><div>line3</div>";
+		const string expected = "<p>line1</p><p><br></p><p>line3</p>";
 
 		var result = input.ToInnerHtml();
 
@@ -85,7 +85,7 @@ public sealed class ToInnerHtmlShould
 	public void ConvertThirdEmpty()
 	{
 		var input = "line1" + Environment.NewLine + "line2" + Environment.NewLine + Environment.NewLine;
-		const string expected = "<div>line1</div><div>line2</div><div><br></div>";
+		const string expected = "<p>line1</p><p>line2</p><p><br></p>";
 
 		var result = input.ToInnerHtml();
 
@@ -98,7 +98,7 @@ public sealed class ToInnerHtmlShould
 	public void KeepItalic()
 	{
 		var input = "some <i>italic</i> value" + Environment.NewLine + "new <i>line</i>";
-		const string expected = "<div>some <i>italic</i> value</div><div>new <i>line</i></div>";
+		const string expected = "<p>some <i>italic</i> value</p><p>new <i>line</i></p>";
 
 		var result = input.ToInnerHtml();
 
@@ -111,7 +111,7 @@ public sealed class ToInnerHtmlShould
 	public void KeepBold()
 	{
 		var input = "some <b>italic</b> value" + Environment.NewLine + "new <b>line</b>";
-		const string expected = "<div>some <b>italic</b> value</div><div>new <b>line</b></div>";
+		const string expected = "<p>some <b>italic</b> value</p><p>new <b>line</b></p>";
 
 		var result = input.ToInnerHtml();
 

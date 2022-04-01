@@ -5,7 +5,13 @@
 	<div class="mud-input-control-input-container">
 
 		<div class="@InputContainerClasses">
-			<div id="@_id" class="@InputClasses" contentEditable="true"></div>
+			
+			@if (HasToolbar)
+			{
+				<MudRichTextToolbar TextField="this" />	
+			}
+
+			<div id="@Id" class="@InputClasses" contentEditable="true"></div>
 
 			@if (Variant == Variant.Outlined)
 			{
