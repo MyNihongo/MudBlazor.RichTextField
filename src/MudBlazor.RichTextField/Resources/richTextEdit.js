@@ -141,10 +141,8 @@ function applyElementCandidate(elementId, selection, keyCode) {
 				const parentWithTag = tryGetParentTag(element, candidate.tagName);
 				if (parentWithTag) {
 					const nodeLength = getNodeLength(selection.startContainer);
-					if (selection.startOffset === 0) {
-						return;
-					} else if (selection.startOffset === nodeLength) {
-						return;
+					if (selection.startOffset === nodeLength) {
+						newElement = appendElement(element, parentWithTag, startIndex);
 					} else {
 						newElement = splitElement(element, parentWithTag, startIndex, endOffset);
 					}
@@ -222,6 +220,27 @@ function insertNewElement(element, tagName, startIndex, endOffset) {
 
 	element.innerHTML = innerHtml;
 	return getNodeAt(element, startIndex + endOffset);
+}
+
+function appendElement(element, parentWithTag, startIndex) {
+	if (element.tagName === parentWithTag.tagName) {
+		const currentHtml = element.innerHTML.substring(0, startIndex);
+		const nextHtml = element.innerHTML.substring(startIndex);
+		const nextNode = getNextNode(element.parentElement, element);
+
+		element.innerHTML = currentHtml;
+
+		if (nextNode) {
+			prependInnerText(nextNode.node, nextHtml);
+
+			const newElementIndex = currentHtml.length + element.tagName.length * 2 + 5; // 5 for `<>` + `</>`
+			return getNodeAt(element.parentElement, newElementIndex);
+		} else {
+			console.log("not implemented");
+		}
+	} else {
+		console.log("not implemented");
+	}
 }
 
 function splitElement(element, parentWithTag, startIndex, endOffset) {
@@ -316,6 +335,27 @@ function getNodeAt(parentElement, index) {
 	return undefined;
 }
 
+function getNextNode(parentElement, node) {
+	for (let i = 0, nodeIndex = 0; i < parentElement.childNodes.length; i++) {
+		if (parentElement.childNodes[i] !== node) {
+			nodeIndex += getNodeLength(parentElement.childNodes[i]);
+			continue;
+		}
+
+		const nextIndex = i + 1;
+		if (nextIndex < parentElement.childNodes.length) {
+			return {
+				node: parentElement.childNodes[nextIndex],
+				index: nodeIndex
+			};
+		}
+
+		break;
+	}
+
+	return undefined;
+}
+
 function getNodeLength(node) {
 	if (node instanceof Element) {
 		return node.outerHTML.length;
@@ -334,4 +374,12 @@ function setWindowSelectionRange(range) {
 	const windowSelection = window.getSelection();
 	windowSelection.removeAllRanges();
 	windowSelection.addRange(range);
+}
+
+function prependInnerText(node, text) {
+	if (node instanceof Element) {
+		node.innerHTML = text + node.innerHTML;
+	} else {
+		node.textContent = text + node.textContent;
+	}
 }
