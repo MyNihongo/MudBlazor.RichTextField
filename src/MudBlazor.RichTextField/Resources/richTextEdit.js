@@ -234,7 +234,7 @@ function appendElement(element, parentWithTag, startIndex) {
 		if (nextNode) {
 			prependInnerText(nextNode.node, nextHtml);
 
-			const newElementIndex = currentHtml.length + element.tagName.length * 2 + 5; // 5 for `<>` + `</>`
+			const newElementIndex = nextNode.index + currentHtml.length + element.tagName.length * 2 + 5; // 5 for `<>` + `</>`
 			return getNodeAt(element.parentElement, newElementIndex);
 		} else {
 			const textNode = document.createTextNode(nextHtml);
