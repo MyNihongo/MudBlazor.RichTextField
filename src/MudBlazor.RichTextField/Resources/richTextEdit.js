@@ -74,7 +74,7 @@ MudBlazorRichTextEdit.applyFormatting = (elementId, tagName, isActive) => {
 			startContainer: selection.startContainer,
 			startOffset: selection.startOffset,
 			tagName: tagName,
-			isActive: isActive // TODO: is it needed? it is determined by analyzing the nodes
+			isActive: isActive
 		};
 	} else {
 		
@@ -134,27 +134,7 @@ function applyElementCandidate(elementId, selection, keyCode) {
 			// Make sure that the position is not moved by arrow keys
 			const endOffset = 1;
 			if (candidate.startOffset === selection.startOffset - endOffset && (keyCode < 37 || keyCode > 40)) {
-				const element = getSelectionElement(selection.startContainer);
-				const startIndex = getSelectionIndex(element, candidate);
-
-				let newElement;
-				const parentWithTag = tryGetParentTag(element, candidate.tagName);
-				if (parentWithTag) {
-					const nodeLength = getNodeLength(selection.startContainer);
-					if (selection.startOffset === nodeLength) {
-						newElement = appendElement(element, parentWithTag, startIndex);
-					} else {
-						newElement = splitElement(element, parentWithTag, startIndex, endOffset);
-					}
-				} else {
-					// TODO: does not work for the empty line
-					newElement = insertNewElement(element, candidate.tagName, startIndex, endOffset);
-				}
-
-				const range = document.createRange();
-				range.setStart(newElement, endOffset);
-				range.collapse(true);
-				setWindowSelectionRange(range);
+				throw Error("not implemented");
 			}
 		}
 	}
@@ -211,82 +191,6 @@ function removeMudShrink(element) {
 	element.classList.remove(mudShrink);
 }
 
-function insertNewElement(element, tagName, startIndex, endOffset) {
-	const innerHtml =
-		element.innerHTML.substring(0, startIndex) +
-		`<${tagName}>` +
-		element.innerHTML.substring(startIndex, startIndex + endOffset) +
-		`</${tagName}>` +
-		element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
-
-	element.innerHTML = innerHtml;
-	return getNodeAt(element, startIndex + endOffset);
-}
-
-function appendElement(element, parentWithTag, startIndex) {
-	if (element.tagName === parentWithTag.tagName) {
-		const currentHtml = element.innerHTML.substring(0, startIndex);
-		const nextHtml = element.innerHTML.substring(startIndex);
-		const nextNode = getNextNode(element.parentElement, element);
-
-		element.innerHTML = currentHtml;
-
-		if (nextNode) {
-			prependInnerText(nextNode.node, nextHtml);
-
-			const newElementIndex = nextNode.index + currentHtml.length + element.tagName.length * 2 + 5; // 5 for `<>` + `</>`
-			return getNodeAt(element.parentElement, newElementIndex);
-		} else {
-			const textNode = document.createTextNode(nextHtml);
-			element.after(textNode);
-			return textNode;
-		}
-	} else {
-		console.log("not implemented");
-	}
-}
-
-function splitElement(element, parentWithTag, startIndex, endOffset) {
-	const innerHtml =
-		element.innerHTML.substring(0, startIndex) +
-		`</${parentWithTag.tagName}>` +
-		element.innerHTML.substring(startIndex, startIndex + endOffset) +
-		`<${parentWithTag.tagName}>` +
-		element.innerHTML.substring(startIndex + endOffset, element.innerHTML.length);
-
-	if (element.tagName === parentWithTag.tagName) {
-		const parent = element.parentElement;
-		const elementIndex = getSelectionIndex(parent, { startContainer: element, startOffset: startIndex });
-
-		element.outerHTML = `<${parentWithTag.tagName}>${innerHtml}</${parentWithTag.tagName}>`;
-
-		const outerHtmlOffset = parentWithTag.tagName.length * 2 + 5; // 5 for `<>` + `</>`
-		return getNodeAt(parent, elementIndex + outerHtmlOffset);
-	} else {
-		throw Error("does not work with nested (3+ levels due to the iteration)");
-
-		const superParent = parentWithTag.parentElement;
-		const parentWithTagIndex = getSelectionIndex(superParent, { startContainer: parentWithTag, startOffset: 0 });
-
-		// Since the outerHTML tags are not included, add their length
-		const elementIndex = getSelectionIndex(parentWithTag, { startContainer: element, startOffset: 0 }) + parentWithTag.tagName.length + 2;
-
-		const outerHtml =
-			parentWithTag.outerHTML.substring(0, elementIndex) +
-			`</${parentWithTag.tagName}><${element.tagName}><${parentWithTag.tagName}>` +
-			innerHtml +
-			`</${parentWithTag.tagName}></${element.tagName}><${parentWithTag.tagName}>` +
-			parentWithTag.outerHTML.substring(elementIndex + element.outerHTML.length, parentWithTag.outerHTML.length);
-
-		parentWithTag.outerHTML = outerHtml;
-
-		const newElementOffset = parentWithTag.tagName.length + 3; // 3 for `</>` (closing tag before the parent)
-		const newElement = getNodeAt(superParent, parentWithTagIndex + elementIndex + newElementOffset);
-
-		const newNodeOffset = parentWithTag.tagName.length * 2 + 5; // 5 for `<>` + `</>`
-		return getNodeAt(newElement, startIndex + newNodeOffset);
-	}
-}
 
 function isNotNullOrWhitespace(str) {
 	return str && str.match(/^\s*$/) === null;
@@ -294,71 +198,6 @@ function isNotNullOrWhitespace(str) {
 
 function isSelectionEmpty(selection) {
 	return selection.startContainer === selection.endContainer && selection.startOffset === selection.endOffset;
-}
-
-function tryGetParentTag(element, elementTag) {
-	// RichText root always has the ID
-	while (element.parentElement && !element.parentElement.id) {
-		if (element.tagName === elementTag) {
-			return element;
-		}
-
-		element = element.parentElement;
-	}
-
-	return undefined;
-}
-
-function getSelectionIndex(parentElement, candidate) {
-	if (parentElement === candidate.startContainer) {
-		return candidate.startOffset;
-	}
-
-	let index = 0;
-	for (let i = 0; i < parentElement.childNodes.length; i++) {
-		if (parentElement.childNodes[i] === candidate.startContainer) {
-			return index + candidate.startOffset;
-		}
-
-		index += getNodeLength(parentElement.childNodes[i]);
-	}
-
-	return index;
-}
-
-function getNodeAt(parentElement, index) {
-	let currentIndex = 0;
-	for (let i = 0; i < parentElement.childNodes.length; i++) {
-		const nodeLength = getNodeLength(parentElement.childNodes[i]);
-		if (index >= currentIndex && index < currentIndex + nodeLength) {
-			return parentElement.childNodes[i];
-		}
-
-		currentIndex += nodeLength;
-	}
-
-	return undefined;
-}
-
-function getNextNode(parentElement, node) {
-	for (let i = 0, nodeIndex = 0; i < parentElement.childNodes.length; i++) {
-		if (parentElement.childNodes[i] !== node) {
-			nodeIndex += getNodeLength(parentElement.childNodes[i]);
-			continue;
-		}
-
-		const nextIndex = i + 1;
-		if (nextIndex < parentElement.childNodes.length) {
-			return {
-				node: parentElement.childNodes[nextIndex],
-				index: nodeIndex
-			};
-		}
-
-		break;
-	}
-
-	return undefined;
 }
 
 function getNodeLength(node) {
@@ -370,9 +209,11 @@ function getNodeLength(node) {
 }
 
 function getSelectionElement(container) {
-	return container instanceof Element
-		? container
-		: container.parentElement;
+	if (container instanceof Element) {
+		return container;
+	} else {
+		return container.parentElement;
+	}
 }
 
 function setWindowSelectionRange(range) {
