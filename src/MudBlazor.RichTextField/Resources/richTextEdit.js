@@ -147,6 +147,7 @@ function applyElementCandidate(elementId, selection, keyCode) {
 						newElement = splitElement(element, parentWithTag, startIndex, endOffset);
 					}
 				} else {
+					// TODO: does not work for the empty line
 					newElement = insertNewElement(element, candidate.tagName, startIndex, endOffset);
 				}
 
@@ -236,7 +237,9 @@ function appendElement(element, parentWithTag, startIndex) {
 			const newElementIndex = currentHtml.length + element.tagName.length * 2 + 5; // 5 for `<>` + `</>`
 			return getNodeAt(element.parentElement, newElementIndex);
 		} else {
-			console.log("not implemented");
+			const textNode = document.createTextNode(nextHtml);
+			element.after(textNode);
+			return textNode;
 		}
 	} else {
 		console.log("not implemented");
